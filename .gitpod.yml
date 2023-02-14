@@ -6,6 +6,7 @@ tasks:
   - name: Go Server
     init: 
       go mod download
+      cp .env.example .env
     command:   
       go run main.go
 

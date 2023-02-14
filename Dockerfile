@@ -3,5 +3,8 @@ WORKDIR /build
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-EXPOSE 8080
-CMD ["go", "run", "main.go"]
+RUN go build -o /app
+
+FROM alpine:3.14.2
+COPY --from=builder /app /bin/app
+ENTRYPOINT ["/bin/app"]
