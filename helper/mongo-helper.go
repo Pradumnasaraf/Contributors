@@ -26,7 +26,7 @@ func init() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
-	checkNilErr(err)
+	CheckNilErr(err)
 
 	fmt.Println("MongoDB Connected sucessfully")
 
@@ -38,7 +38,7 @@ func init() {
 func InsertOneMovie(movie model.Netflix) {
 	result, err := Collection.InsertOne(context.Background(), movie)
 
-	checkNilErr(err)
+	CheckNilErr(err)
 	fmt.Println("Inserted 1 movie in DB with id:", result.InsertedID)
 }
 
@@ -48,7 +48,7 @@ func UpdateOneMovie(movieId string) {
 	update := bson.M{"$set": bson.M{"watched": true}}
 	result, err := Collection.UpdateOne(context.Background(), filter, update)
 
-	checkNilErr(err)
+	CheckNilErr(err)
 	fmt.Println("Modified count:", result.UpsertedCount)
 }
 
@@ -57,7 +57,7 @@ func DeleteOneMovie(movieId string) {
 	filter := bson.M{"_id": id}
 	result, err := Collection.DeleteOne(context.Background(), filter)
 
-	checkNilErr(err)
+	CheckNilErr(err)
 	fmt.Println("Modified count:", result.DeletedCount)
 }
 
@@ -65,7 +65,7 @@ func DeleteAllMovies() int64 {
 	filter := bson.D{{}}
 	result, err := Collection.DeleteMany(context.Background(), filter)
 
-	checkNilErr(err)
+	CheckNilErr(err)
 	fmt.Println("Modified count:", result.DeletedCount)
 	return result.DeletedCount
 }
@@ -75,19 +75,19 @@ func GetOneMovie(movieId string) model.Netflix {
 	filter := bson.M{"_id": id}
 	var movie model.Netflix
 	err := Collection.FindOne(context.Background(), filter).Decode(&movie)
-	checkNilErr(err)
+	CheckNilErr(err)
 	return movie
 }
 
 func GetAllMovies() []primitive.M {
 	cursor, err := Collection.Find(context.Background(), bson.D{{}})
-	checkNilErr(err)
+	CheckNilErr(err)
 	var movies []primitive.M
 
 	for cursor.Next(context.Background()) {
 		var movie bson.M
 		err := cursor.Decode(&movie)
-		checkNilErr(err)
+		CheckNilErr(err)
 
 		movies = append(movies, movie)
 	}
@@ -95,7 +95,7 @@ func GetAllMovies() []primitive.M {
 	return movies
 }
 
-func checkNilErr(err error) {
+func CheckNilErr(err error) {
 	if err != nil {
 		fmt.Println(err)
 	}

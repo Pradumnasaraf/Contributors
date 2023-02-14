@@ -13,7 +13,8 @@ func CreateMovie(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var movie model.Netflix
-	_ = json.NewDecoder(r.Body).Decode(&movie)
+	err := json.NewDecoder(r.Body).Decode(&movie)
+	helper.CheckNilErr(err)
 	helper.InsertOneMovie(movie)
 	json.NewEncoder(w).Encode(movie)
 }
