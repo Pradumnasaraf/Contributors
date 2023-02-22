@@ -6,7 +6,7 @@ A simple API to do CRUD operations on a database.
 
 - [Golang](https://golang.org/)
 - [MongoDB](https://www.mongodb.com/)
-- [Gorilla Mux](github.com/gorilla/mux)
+- [Gin](https://github.com/gin-gonic/gin)
 
 ## Using and developing
 
