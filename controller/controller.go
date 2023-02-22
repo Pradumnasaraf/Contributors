@@ -1,60 +1,61 @@
 package controller
 
 import (
-	"encoding/json"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/pradumnasaraf/go-api/helper"
 	"github.com/pradumnasaraf/go-api/model"
 )
 
-func CreateMovie(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
+func CreateMovie(c *gin.Context) {
 	var movie model.Netflix
-	err := json.NewDecoder(r.Body).Decode(&movie)
-	helper.CheckNilErr(err)
+	err := c.BindJSON(&movie)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	helper.InsertOneMovie(movie)
-	json.NewEncoder(w).Encode(movie)
+	c.JSON(http.StatusCreated, gin.H{"message": "added one entry."})
 }
 
-func MarkAsWatched(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func Watched(c *gin.Context) {
 
-	params := mux.Vars(r)
-	helper.UpdateOneMovie(params["id"])
-	json.NewEncoder(w).Encode(params["id"])
+	id := c.Param("id")
+	helper.UpdateOneMovie(id)
+	c.JSON(http.StatusOK, gin.H{"message": "updated one entry."})
 }
 
-func DeleteAMovie(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func DeleteMovie(c *gin.Context) {
 
-	params := mux.Vars(r)
-	helper.DeleteOneMovie(params["id"])
-	json.NewEncoder(w).Encode(params["id"])
+	id := c.Param("id")
+	helper.DeleteOneMovie(id)
+	c.JSON(http.StatusOK, gin.H{"message": "deleted one entry."})
 }
 
-func DeleteMyAllMovie(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func DeleteAllMovie(c *gin.Context) {
 
 	deltedCount := helper.DeleteAllMovies()
-	json.NewEncoder(w).Encode(deltedCount)
+	c.JSON(http.StatusOK, gin.H{"message": "deleted all entries.", "deletedCount": deltedCount})
 }
 
-func GetMyAllMovie(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func AllMovie(c *gin.Context) {
+
 	allMovies := helper.GetAllMovies()
-	json.NewEncoder(w).Encode(allMovies)
+	if allMovies == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "No movies found"})
+		return
+	}
+	c.JSON(http.StatusOK, allMovies)
 }
 
-func GetAMovie(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	movie := helper.GetOneMovie(params["id"])
-	json.NewEncoder(w).Encode(movie)
+func Movie(c *gin.Context) {
+
+	id := c.Param("id")
+	movie := helper.GetOneMovie(id)
+	c.JSON(http.StatusOK, movie)
 }
 
-func ServeHomepage(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("API is working fine 🚀."))
+func ServeHomepage(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "API working fine"})
 }

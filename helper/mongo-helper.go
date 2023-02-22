@@ -18,7 +18,7 @@ var Collection *mongo.Collection
 
 func init() {
 
-	config.Config() // loading .env file
+	config.Config() // load .env file
 	mongoURL := os.Getenv("MONGO_URL")
 	databaseName := os.Getenv("MONGO_DB")
 	collectionName := os.Getenv("MONGO_COLLECTION")
