@@ -8,5 +8,5 @@ import (
 
 func main() {
 	router := router.Router()
-	router.Run(os.Getenv("API_HOST"))
+	router.Run(os.Getenv("PORT"))
 }
