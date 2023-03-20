@@ -8,5 +8,5 @@ import (
 
 func main() {
 	router := router.Router()
-	router.Run(os.Getenv("PORT"))
+	router.Run("0.0.0.0:" + os.Getenv("PORT"))
 }
