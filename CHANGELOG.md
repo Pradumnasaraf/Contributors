@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/Pradumnasaraf/go-api/compare/v0.2.1...v0.2.2) (2023-03-20)
+
+
+### Bug Fixes
+
+* the port ENV ([d831c5f](https://github.com/Pradumnasaraf/go-api/commit/d831c5f50bc6c61b1a1c6fb9df91d0924452f8cd))
+
+
+
 ## [0.2.1](https://github.com/Pradumnasaraf/go-api/compare/v0.2.0...v0.2.1) (2023-02-22)
 
 
