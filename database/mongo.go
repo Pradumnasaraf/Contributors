@@ -2,10 +2,12 @@ package database
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log"
+	"os"
 	"time"
 
+	"github.com/pradumnasaraf/go-api/config"
 	"github.com/pradumnasaraf/go-api/graph/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,12 +24,15 @@ type MongoDB struct {
 
 // NewMongoDB creates a new MongoDB client and returns it
 func NewMongoDB() *MongoDB {
+	// Load .env file
+	config.Config()
+
 	// Create a context
 	Ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URI"))
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(Ctx, clientOptions)
@@ -41,65 +46,83 @@ func NewMongoDB() *MongoDB {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Connected to MongoDB!")
-	Collection = client.Database("opensource").Collection("contributors")
+	log.Println("Connected to MongoDB!")
+	Collection = client.Database(os.Getenv("MONGO_DB")).Collection(os.Getenv("MONGO_COLLECTION"))
 
 	return &MongoDB{
 		Client: client,
 	}
 }
 
-func (db *MongoDB) Add(contributor *model.Contributor) {
-	result, err := Collection.InsertOne(Ctx, contributor)
+// ADD a new contributor
+func (db *MongoDB) Add(contributor *model.Contributor) error {
+	_, err := Collection.InsertOne(Ctx, contributor)
 
-	CheckNilErr(err)
-	fmt.Println("Inserted a single document: ", result.InsertedID)
+	if err != nil {
+		return errors.New("error while adding a new document. Document with the given ID may already exist")
+	}
+
+	return nil
 }
 
-func (db *MongoDB) GetAll() []*model.Contributor {
+// GET all contributors
+func (db *MongoDB) GetAll() ([]*model.Contributor, error) {
 	cursor, err := Collection.Find(context.Background(), bson.D{{}})
-	CheckNilErr(err)
+	if err != nil {
+		return nil, errors.New("error while getting the documents")
+	}
+
 	defer cursor.Close(Ctx)
 	var result []*model.Contributor
 
 	for cursor.Next(context.Background()) {
 		var contributor *model.Contributor
 		err := cursor.Decode(&contributor)
-		CheckNilErr(err)
+		if err != nil {
+			return nil, errors.New("error while decoding the document")
+		}
 
 		result = append(result, contributor)
 	}
 
-	return result
+	return result, nil
 }
 
-func (db *MongoDB) GetByID(id string) *model.Contributor {
+// GET a contributor by ID
+func (db *MongoDB) GetByID(id string) (*model.Contributor, error) {
 	filter := bson.M{"_id": id}
 	var contributor *model.Contributor
 	err := Collection.FindOne(Ctx, filter).Decode(&contributor)
-	CheckNilErr(err)
-	return contributor
+
+	if err != nil {
+		return nil, errors.New("error while getting the document. Document with the given ID may not exist")
+	}
+
+	return contributor, nil
 }
 
-func (db *MongoDB) UpdateByID(contributor *model.Contributor) {
+// UPDATE a contributor by ID
+func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
 	filter := bson.M{"_id": contributor.ID}
 	update := bson.M{"$set": bson.M{"githubUsername": contributor.GithubUsername, "name": contributor.Name, "email": contributor.Email}}
-	result, err := Collection.UpdateOne(context.Background(), filter, update)
+	result, _ := Collection.UpdateOne(context.Background(), filter, update)
 
-	CheckNilErr(err)
-	fmt.Println("Updated the document: ", result.UpsertedID)
-}
-
-func (db *MongoDB) DeleteByID(id string) {
-	filter := bson.M{"_id": id}
-	result, err := Collection.DeleteOne(context.Background(), filter)
-
-	CheckNilErr(err)
-	fmt.Println("Deleted the document: ", result.DeletedCount)
-}
-
-func CheckNilErr(err error) {
-	if err != nil {
-		fmt.Println(err)
+	if result.MatchedCount == 0 {
+		return errors.New("document not found. Document with the given ID may not exist")
 	}
+
+	return nil
+}
+
+// DELETE a contributor by ID
+func (db *MongoDB) DeleteByID(id string) error {
+	filter := bson.M{"_id": id}
+	result, _ := Collection.DeleteOne(context.Background(), filter)
+
+	if result.DeletedCount == 0 {
+		return errors.New("error while deleting the document. Document with the given ID may not exist")
+	}
+
+	return nil
+
 }

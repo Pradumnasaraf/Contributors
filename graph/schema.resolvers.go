@@ -20,7 +20,13 @@ func (r *mutationResolver) AddContributor(ctx context.Context, input model.NewCo
 		Email:          input.Email,
 		GithubUsername: input.GithubUsername,
 	}
-	db.Add(newContributor)
+
+	err := db.Add(newContributor)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return newContributor, nil
 }
 
@@ -32,25 +38,40 @@ func (r *mutationResolver) UpdateContributorByID(ctx context.Context, id string,
 		Email:          input.Email,
 		GithubUsername: input.GithubUsername,
 	}
-	db.UpdateByID(updateContributor)
+
+	err := db.UpdateByID(updateContributor)
+	if err != nil {
+		return nil, err
+	}
+
 	return updateContributor, nil
 }
 
 // DeleteContributor is the resolver for the deleteContributor field.
 func (r *mutationResolver) DeleteContributor(ctx context.Context, id string) (*model.Contributor, error) {
-	db.DeleteByID(id)
+	err := db.DeleteByID(id)
+	if err != nil {
+		return nil, err
+	}
 	return &model.Contributor{ID: id}, nil
 }
 
 // GetAllContributors is the resolver for the getAllContributors field.
 func (r *queryResolver) GetAllContributors(ctx context.Context) ([]*model.Contributor, error) {
-	contributors := db.GetAll()
+	contributors, err := db.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
 	return contributors, nil
 }
 
 // GetAContributorByID is the resolver for the getAContributorById field.
 func (r *queryResolver) GetAContributorByID(ctx context.Context, id string) (*model.Contributor, error) {
-	contributor := db.GetByID(id)
+	contributor, err := db.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
 	return contributor, nil
 }
 
@@ -63,10 +84,4 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
 var db = database.NewMongoDB()
