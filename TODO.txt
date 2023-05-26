@@ -1,6 +1,0 @@
-- Update the release file from release.json to release.yml
-- Add Gin support
-- Create a Handler dir
-- Add Basic Auth support
-- Chnage prohect name to Contributors
-
