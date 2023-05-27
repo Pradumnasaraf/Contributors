@@ -8,7 +8,7 @@ tasks:
       go mod download
     command: | 
       cp .env.example .env
-      go run main.go
+      go run server.go
 
       
 image:
