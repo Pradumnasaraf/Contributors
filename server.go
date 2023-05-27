@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/go-api/config"
-	"github.com/pradumnasaraf/go-api/handler"
-	"github.com/pradumnasaraf/go-api/middleware"
+	"github.com/pradumnasaraf/Contributors/config"
+	"github.com/pradumnasaraf/Contributors/handler"
+	"github.com/pradumnasaraf/Contributors/middleware"
 )
 
 func main() {

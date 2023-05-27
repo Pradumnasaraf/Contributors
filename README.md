@@ -25,22 +25,22 @@ go run main.go
 
 The easiest way to run this project in cloud with use of [Gitpod](https://www.gitpod.io/). Just click on the button below to start the project in Gitpod.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/Pradumnasaraf/go-api)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/pradumnasaraf/Contributors)
 
 ### Docker Compose
 
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have alredy cloned the repository.   
+Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have alredy cloned the repository.
 
 Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container.
 
 ```bash
 docker compose up
-``` 
+```
 
-## License 
+## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) for details.
 
-## Security 
+## Security
 
 If you discover a security vulnerability within this project, please check the [security policy](SECURITY.md) for more information.

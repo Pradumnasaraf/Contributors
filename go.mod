@@ -1,4 +1,4 @@
-module github.com/pradumnasaraf/go-api
+module github.com/pradumnasaraf/Contributors
 
 go 1.19
 

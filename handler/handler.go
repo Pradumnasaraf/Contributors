@@ -4,10 +4,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/go-api/graph"
+	"github.com/pradumnasaraf/Contributors/graph"
 )
 
-//Graphql handler
+// Graphql handler
 func GraphqlHandler() gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
@@ -18,7 +18,7 @@ func GraphqlHandler() gin.HandlerFunc {
 	}
 }
 
-//Playground handler
+// Playground handler
 func PlaygroundHandler() gin.HandlerFunc {
 	h := playground.Handler("GraphQL", "/query")
 

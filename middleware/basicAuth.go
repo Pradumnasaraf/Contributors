@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/go-api/config"
+	"github.com/pradumnasaraf/Contributors/config"
 )
 
 func BasicAuth() gin.HandlerFunc {
