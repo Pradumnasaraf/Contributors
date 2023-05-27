@@ -1,12 +1,6 @@
-## GO API
+## Contributors
 
-A simple API to do CRUD operations on a database.
-
-## Tech Stack
-
-- [Golang](https://golang.org/)
-- [MongoDB](https://www.mongodb.com/)
-- [Gin](https://github.com/gin-gonic/gin)
+Contributors is a GraphQL API written in Go. It uses MongoDB as a database. It is a simple API to manage Open Source Contributors and their contributions.
 
 ## Using and developing
 
@@ -42,17 +36,6 @@ Then, run the following commands to start the server. It will step up a MongoDB 
 ```bash
 docker compose up
 ``` 
-
-## API Endpoints 
-
-- `GET /` - Homepage
-- `GET /api/movie/{id}` - Get a movie
-- `GET /api/movies` - Get all movies
-- `POST /api/movie` - Create a movie
-- `PUT /api/movie/{id}` - Mark a movie as watched
-- `DELETE /api/movie/{id}` - Delete a movie
-- `DELETE /api/movies` - Delete all movies
-
 
 ## License 
 
