@@ -1,12 +1,6 @@
-## GO API
+## Contributors
 
-A simple API to do CRUD operations on a database.
-
-## Tech Stack
-
-- [Golang](https://golang.org/)
-- [MongoDB](https://www.mongodb.com/)
-- [Gin](https://github.com/gin-gonic/gin)
+Contributors is a GraphQL API written in Go. It uses MongoDB as a database. It is a simple API to manage Open Source Contributors and their contributions.
 
 ## Using and developing
 
@@ -31,33 +25,22 @@ go run main.go
 
 The easiest way to run this project in cloud with use of [Gitpod](https://www.gitpod.io/). Just click on the button below to start the project in Gitpod.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/Pradumnasaraf/go-api)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/pradumnasaraf/Contributors)
 
 ### Docker Compose
 
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have alredy cloned the repository.   
+Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have alredy cloned the repository.
 
 Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container.
 
 ```bash
 docker compose up
-``` 
+```
 
-## API Endpoints 
-
-- `GET /` - Homepage
-- `GET /api/movie/{id}` - Get a movie
-- `GET /api/movies` - Get all movies
-- `POST /api/movie` - Create a movie
-- `PUT /api/movie/{id}` - Mark a movie as watched
-- `DELETE /api/movie/{id}` - Delete a movie
-- `DELETE /api/movies` - Delete all movies
-
-
-## License 
+## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) for details.
 
-## Security 
+## Security
 
 If you discover a security vulnerability within this project, please check the [security policy](SECURITY.md) for more information.
