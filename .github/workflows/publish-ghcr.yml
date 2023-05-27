@@ -37,5 +37,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/pradumnasaraf/go-api:latest
+          tags: ghcr.io/pradumnasaraf/contributors:latest
           labels: ${{ steps.meta.outputs.labels }}
