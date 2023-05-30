@@ -3,13 +3,34 @@
 # https://gqlgen.com/getting-started/
 
 type Contributor {
-  id: ID!
+  userId: ID!
   githubUsername: String!
   name: String!
   email: String!
+  contributions: [Contribution!]
+} 
+
+type Contribution {
+  contributionId: ID!
+  projectName: String!
+  type: String!
+  date: String!
+}
+
+input NewContribution {
+  projectName: String!
+  type: String!
+  date: String!
 }
 
 input NewContributor {
+  githubUsername: String!
+  name: String!
+  email: String!
+  contributions: NewContribution
+}
+
+input UpdateContributor {
   githubUsername: String!
   name: String!
   email: String!
@@ -17,11 +38,13 @@ input NewContributor {
 
 type Query {
   getAllContributors: [Contributor!]!
-  getAContributorById(id: ID!): Contributor!
+  getAContributor(userId: ID!): Contributor!
 }
 
 type Mutation {
-  addContributor(input: NewContributor!): Contributor!
-  updateContributorById(id: ID!, input: NewContributor!): Contributor!
-  deleteContributor(id: ID!): Contributor!
+  addAContributor(input: NewContributor!): Contributor!
+  updateAContributor(userId: ID!, input: UpdateContributor!): Contributor!
+  deleteAContributor(userId: ID!): Contributor!
+  deleteAContribution(userId : ID!, contributionId: ID!): Contribution!
+  addAContribution(userId: ID!, input: NewContribution!): Contribution!
 }
