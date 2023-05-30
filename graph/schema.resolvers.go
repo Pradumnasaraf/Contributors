@@ -12,13 +12,26 @@ import (
 	"github.com/pradumnasaraf/Contributors/graph/model"
 )
 
-// AddContributor is the resolver for the addContributor field.
-func (r *mutationResolver) AddContributor(ctx context.Context, input model.NewContributor) (*model.Contributor, error) {
+// AddAContributor is the resolver for the addAContributor field.
+func (r *mutationResolver) AddAContributor(ctx context.Context, input model.NewContributor) (*model.Contributor, error) {
 	newContributor := &model.Contributor{
-		ID:             fmt.Sprint("U" + input.GithubUsername),
+		UserID:         fmt.Sprint("U" + input.GithubUsername),
 		Name:           input.Name,
 		Email:          input.Email,
 		GithubUsername: input.GithubUsername,
+	}
+
+	if input.Contributions != nil {
+		newContributor.Contributions = []*model.Contribution{
+			{
+				ContributionID: fmt.Sprint("C" + input.Contributions.ProjectName),
+				ProjectName:    input.Contributions.ProjectName,
+				Type:           input.Contributions.Type,
+				Date:           input.Contributions.Date,
+			},
+		}
+	} else {
+		newContributor.Contributions = []*model.Contribution{}
 	}
 
 	err := db.Add(newContributor)
@@ -30,10 +43,10 @@ func (r *mutationResolver) AddContributor(ctx context.Context, input model.NewCo
 	return newContributor, nil
 }
 
-// UpdateContributorByID is the resolver for the updateContributorById field.
-func (r *mutationResolver) UpdateContributorByID(ctx context.Context, id string, input model.NewContributor) (*model.Contributor, error) {
+// UpdateAContributor is the resolver for the updateAContributor field.
+func (r *mutationResolver) UpdateAContributor(ctx context.Context, userID string, input model.UpdateContributor) (*model.Contributor, error) {
 	updateContributor := &model.Contributor{
-		ID:             id,
+		UserID:         userID,
 		Name:           input.Name,
 		Email:          input.Email,
 		GithubUsername: input.GithubUsername,
@@ -47,13 +60,39 @@ func (r *mutationResolver) UpdateContributorByID(ctx context.Context, id string,
 	return updateContributor, nil
 }
 
-// DeleteContributor is the resolver for the deleteContributor field.
-func (r *mutationResolver) DeleteContributor(ctx context.Context, id string) (*model.Contributor, error) {
-	err := db.DeleteByID(id)
+// DeleteAContributor is the resolver for the deleteAContributor field.
+func (r *mutationResolver) DeleteAContributor(ctx context.Context, userID string) (*model.Contributor, error) {
+	err := db.DeleteByID(userID)
 	if err != nil {
 		return nil, err
 	}
-	return &model.Contributor{ID: id}, nil
+	return &model.Contributor{UserID: userID}, nil
+}
+
+// DeleteAContribution is the resolver for the deleteAContribution field.
+func (r *mutationResolver) DeleteAContribution(ctx context.Context, userID string, contributionID string) (*model.Contribution, error) {
+	err := db.DeleteContributionByID(userID, contributionID)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Contribution{ContributionID: contributionID}, nil
+}
+
+// AddAContribution is the resolver for the addAContribution field.
+func (r *mutationResolver) AddAContribution(ctx context.Context, userID string, input model.NewContribution) (*model.Contribution, error) {
+	newContribution := &model.Contribution{
+		ContributionID: fmt.Sprint("C" + input.ProjectName),
+		ProjectName:    input.ProjectName,
+		Type:           input.Type,
+		Date:           input.Date,
+	}
+
+	err := db.AddContributionByID(userID, newContribution)
+	if err != nil {
+		return nil, err
+	}
+
+	return newContribution, nil
 }
 
 // GetAllContributors is the resolver for the getAllContributors field.
@@ -66,9 +105,9 @@ func (r *queryResolver) GetAllContributors(ctx context.Context) ([]*model.Contri
 	return contributors, nil
 }
 
-// GetAContributorByID is the resolver for the getAContributorById field.
-func (r *queryResolver) GetAContributorByID(ctx context.Context, id string) (*model.Contributor, error) {
-	contributor, err := db.GetByID(id)
+// GetAContributor is the resolver for the getAContributor field.
+func (r *queryResolver) GetAContributor(ctx context.Context, userID string) (*model.Contributor, error) {
+	contributor, err := db.GetByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,10 +123,4 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
 var db = database.NewMongoDB()

@@ -89,8 +89,8 @@ func (db *MongoDB) GetAll() ([]*model.Contributor, error) {
 }
 
 // GET a contributor by ID
-func (db *MongoDB) GetByID(id string) (*model.Contributor, error) {
-	filter := bson.M{"_id": id}
+func (db *MongoDB) GetByID(userId string) (*model.Contributor, error) {
+	filter := bson.M{"_id": userId}
 	var contributor *model.Contributor
 	err := Collection.FindOne(Ctx, filter).Decode(&contributor)
 
@@ -103,7 +103,7 @@ func (db *MongoDB) GetByID(id string) (*model.Contributor, error) {
 
 // UPDATE a contributor by ID
 func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
-	filter := bson.M{"_id": contributor.ID}
+	filter := bson.M{"_id": contributor.UserID}
 	update := bson.M{"$set": bson.M{"githubUsername": contributor.GithubUsername, "name": contributor.Name, "email": contributor.Email}}
 	result, _ := Collection.UpdateOne(context.Background(), filter, update)
 
@@ -115,8 +115,8 @@ func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
 }
 
 // DELETE a contributor by ID
-func (db *MongoDB) DeleteByID(id string) error {
-	filter := bson.M{"_id": id}
+func (db *MongoDB) DeleteByID(userId string) error {
+	filter := bson.M{"_id": userId}
 	result, _ := Collection.DeleteOne(context.Background(), filter)
 
 	if result.DeletedCount == 0 {
@@ -125,4 +125,30 @@ func (db *MongoDB) DeleteByID(id string) error {
 
 	return nil
 
+}
+
+// DELETE contribution by ID
+func (db *MongoDB) DeleteContributionByID(userId string, contributionID string) error {
+	filter := bson.M{"_id": userId, "contributions.contributionId": contributionID}
+	update := bson.M{"$pull": bson.M{"contributions": bson.M{"contributionId": contributionID}}}
+	result, _ := Collection.UpdateOne(context.Background(), filter, update)
+
+	if result.MatchedCount == 0 {
+		return errors.New("document not found. Document with the given ID may not exist")
+	}
+
+	return nil
+}
+
+// ADD contribution by ID
+func (db *MongoDB) AddContributionByID(userId string, contribution *model.Contribution) error {
+	filter := bson.M{"_id": userId, "contributions.contributionId": bson.M{"$ne": contribution.ContributionID}}
+	update := bson.M{"$push": bson.M{"contributions": contribution}}
+	result, _ := Collection.UpdateOne(Ctx, filter, update)
+
+	if result.MatchedCount == 0 {
+		return errors.New("document not found. Document with the given ID may not exist")
+	}
+
+	return nil
 }

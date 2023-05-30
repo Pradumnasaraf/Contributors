@@ -45,33 +45,45 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Contribution struct {
+		ContributionID func(childComplexity int) int
+		Date           func(childComplexity int) int
+		ProjectName    func(childComplexity int) int
+		Type           func(childComplexity int) int
+	}
+
 	Contributor struct {
+		Contributions  func(childComplexity int) int
 		Email          func(childComplexity int) int
 		GithubUsername func(childComplexity int) int
-		ID             func(childComplexity int) int
 		Name           func(childComplexity int) int
+		UserID         func(childComplexity int) int
 	}
 
 	Mutation struct {
-		AddContributor        func(childComplexity int, input model.NewContributor) int
-		DeleteContributor     func(childComplexity int, id string) int
-		UpdateContributorByID func(childComplexity int, id string, input model.NewContributor) int
+		AddAContribution    func(childComplexity int, userID string, input model.NewContribution) int
+		AddAContributor     func(childComplexity int, input model.NewContributor) int
+		DeleteAContribution func(childComplexity int, userID string, contributionID string) int
+		DeleteAContributor  func(childComplexity int, userID string) int
+		UpdateAContributor  func(childComplexity int, userID string, input model.UpdateContributor) int
 	}
 
 	Query struct {
-		GetAContributorByID func(childComplexity int, id string) int
-		GetAllContributors  func(childComplexity int) int
+		GetAContributor    func(childComplexity int, userID string) int
+		GetAllContributors func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	AddContributor(ctx context.Context, input model.NewContributor) (*model.Contributor, error)
-	UpdateContributorByID(ctx context.Context, id string, input model.NewContributor) (*model.Contributor, error)
-	DeleteContributor(ctx context.Context, id string) (*model.Contributor, error)
+	AddAContributor(ctx context.Context, input model.NewContributor) (*model.Contributor, error)
+	UpdateAContributor(ctx context.Context, userID string, input model.UpdateContributor) (*model.Contributor, error)
+	DeleteAContributor(ctx context.Context, userID string) (*model.Contributor, error)
+	DeleteAContribution(ctx context.Context, userID string, contributionID string) (*model.Contribution, error)
+	AddAContribution(ctx context.Context, userID string, input model.NewContribution) (*model.Contribution, error)
 }
 type QueryResolver interface {
 	GetAllContributors(ctx context.Context) ([]*model.Contributor, error)
-	GetAContributorByID(ctx context.Context, id string) (*model.Contributor, error)
+	GetAContributor(ctx context.Context, userID string) (*model.Contributor, error)
 }
 
 type executableSchema struct {
@@ -89,6 +101,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Contribution.contributionId":
+		if e.complexity.Contribution.ContributionID == nil {
+			break
+		}
+
+		return e.complexity.Contribution.ContributionID(childComplexity), true
+
+	case "Contribution.date":
+		if e.complexity.Contribution.Date == nil {
+			break
+		}
+
+		return e.complexity.Contribution.Date(childComplexity), true
+
+	case "Contribution.projectName":
+		if e.complexity.Contribution.ProjectName == nil {
+			break
+		}
+
+		return e.complexity.Contribution.ProjectName(childComplexity), true
+
+	case "Contribution.type":
+		if e.complexity.Contribution.Type == nil {
+			break
+		}
+
+		return e.complexity.Contribution.Type(childComplexity), true
+
+	case "Contributor.contributions":
+		if e.complexity.Contributor.Contributions == nil {
+			break
+		}
+
+		return e.complexity.Contributor.Contributions(childComplexity), true
+
 	case "Contributor.email":
 		if e.complexity.Contributor.Email == nil {
 			break
@@ -103,13 +150,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Contributor.GithubUsername(childComplexity), true
 
-	case "Contributor.id":
-		if e.complexity.Contributor.ID == nil {
-			break
-		}
-
-		return e.complexity.Contributor.ID(childComplexity), true
-
 	case "Contributor.name":
 		if e.complexity.Contributor.Name == nil {
 			break
@@ -117,53 +157,84 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Contributor.Name(childComplexity), true
 
-	case "Mutation.addContributor":
-		if e.complexity.Mutation.AddContributor == nil {
+	case "Contributor.userId":
+		if e.complexity.Contributor.UserID == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_addContributor_args(context.TODO(), rawArgs)
+		return e.complexity.Contributor.UserID(childComplexity), true
+
+	case "Mutation.addAContribution":
+		if e.complexity.Mutation.AddAContribution == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_addAContribution_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AddContributor(childComplexity, args["input"].(model.NewContributor)), true
+		return e.complexity.Mutation.AddAContribution(childComplexity, args["userId"].(string), args["input"].(model.NewContribution)), true
 
-	case "Mutation.deleteContributor":
-		if e.complexity.Mutation.DeleteContributor == nil {
+	case "Mutation.addAContributor":
+		if e.complexity.Mutation.AddAContributor == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_deleteContributor_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_addAContributor_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteContributor(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.AddAContributor(childComplexity, args["input"].(model.NewContributor)), true
 
-	case "Mutation.updateContributorById":
-		if e.complexity.Mutation.UpdateContributorByID == nil {
+	case "Mutation.deleteAContribution":
+		if e.complexity.Mutation.DeleteAContribution == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_updateContributorById_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_deleteAContribution_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateContributorByID(childComplexity, args["id"].(string), args["input"].(model.NewContributor)), true
+		return e.complexity.Mutation.DeleteAContribution(childComplexity, args["userId"].(string), args["contributionId"].(string)), true
 
-	case "Query.getAContributorById":
-		if e.complexity.Query.GetAContributorByID == nil {
+	case "Mutation.deleteAContributor":
+		if e.complexity.Mutation.DeleteAContributor == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getAContributorById_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_deleteAContributor_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.GetAContributorByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteAContributor(childComplexity, args["userId"].(string)), true
+
+	case "Mutation.updateAContributor":
+		if e.complexity.Mutation.UpdateAContributor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAContributor_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateAContributor(childComplexity, args["userId"].(string), args["input"].(model.UpdateContributor)), true
+
+	case "Query.getAContributor":
+		if e.complexity.Query.GetAContributor == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getAContributor_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAContributor(childComplexity, args["userId"].(string)), true
 
 	case "Query.getAllContributors":
 		if e.complexity.Query.GetAllContributors == nil {
@@ -180,7 +251,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputNewContribution,
 		ec.unmarshalInputNewContributor,
+		ec.unmarshalInputUpdateContributor,
 	)
 	first := true
 
@@ -260,7 +333,31 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_addContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_addAContribution_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userId"] = arg0
+	var arg1 model.NewContribution
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNNewContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_addAContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.NewContributor
@@ -275,37 +372,61 @@ func (ec *executionContext) field_Mutation_addContributor_args(ctx context.Conte
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteAContribution_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["userId"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["contributionId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contributionId"))
+		arg1, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["contributionId"] = arg1
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateContributorById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteAContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
-	var arg1 model.NewContributor
+	args["userId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateAContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userId"] = arg0
+	var arg1 model.UpdateContributor
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNNewContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -329,18 +450,18 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getAContributorById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getAContributor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg0
+	args["userId"] = arg0
 	return args, nil
 }
 
@@ -382,8 +503,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Contributor_id(ctx context.Context, field graphql.CollectedField, obj *model.Contributor) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Contributor_id(ctx, field)
+func (ec *executionContext) _Contribution_contributionId(ctx context.Context, field graphql.CollectedField, obj *model.Contribution) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contribution_contributionId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -396,7 +517,7 @@ func (ec *executionContext) _Contributor_id(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
+		return obj.ContributionID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -413,7 +534,183 @@ func (ec *executionContext) _Contributor_id(ctx context.Context, field graphql.C
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Contributor_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Contribution_contributionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contribution",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contribution_projectName(ctx context.Context, field graphql.CollectedField, obj *model.Contribution) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contribution_projectName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProjectName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contribution_projectName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contribution",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contribution_type(ctx context.Context, field graphql.CollectedField, obj *model.Contribution) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contribution_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contribution_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contribution",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contribution_date(ctx context.Context, field graphql.CollectedField, obj *model.Contribution) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contribution_date(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Date, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contribution_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contribution",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contributor_userId(ctx context.Context, field graphql.CollectedField, obj *model.Contributor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contributor_userId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UserID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contributor_userId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Contributor",
 		Field:      field,
@@ -558,8 +855,8 @@ func (ec *executionContext) fieldContext_Contributor_email(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_addContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_addContributor(ctx, field)
+func (ec *executionContext) _Contributor_contributions(ctx context.Context, field graphql.CollectedField, obj *model.Contributor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contributor_contributions(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -572,7 +869,58 @@ func (ec *executionContext) _Mutation_addContributor(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AddContributor(rctx, fc.Args["input"].(model.NewContributor))
+		return obj.Contributions, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Contribution)
+	fc.Result = res
+	return ec.marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contributor_contributions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contributor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "contributionId":
+				return ec.fieldContext_Contribution_contributionId(ctx, field)
+			case "projectName":
+				return ec.fieldContext_Contribution_projectName(ctx, field)
+			case "type":
+				return ec.fieldContext_Contribution_type(ctx, field)
+			case "date":
+				return ec.fieldContext_Contribution_date(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contribution", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_addAContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_addAContributor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddAContributor(rctx, fc.Args["input"].(model.NewContributor))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -589,7 +937,7 @@ func (ec *executionContext) _Mutation_addContributor(ctx context.Context, field 
 	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_addContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_addAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -597,14 +945,16 @@ func (ec *executionContext) fieldContext_Mutation_addContributor(ctx context.Con
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contributor_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_Contributor_userId(ctx, field)
 			case "githubUsername":
 				return ec.fieldContext_Contributor_githubUsername(ctx, field)
 			case "name":
 				return ec.fieldContext_Contributor_name(ctx, field)
 			case "email":
 				return ec.fieldContext_Contributor_email(ctx, field)
+			case "contributions":
+				return ec.fieldContext_Contributor_contributions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contributor", field.Name)
 		},
@@ -616,15 +966,15 @@ func (ec *executionContext) fieldContext_Mutation_addContributor(ctx context.Con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_addContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_addAContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateContributorById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateContributorById(ctx, field)
+func (ec *executionContext) _Mutation_updateAContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateAContributor(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -637,7 +987,7 @@ func (ec *executionContext) _Mutation_updateContributorById(ctx context.Context,
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateContributorByID(rctx, fc.Args["id"].(string), fc.Args["input"].(model.NewContributor))
+		return ec.resolvers.Mutation().UpdateAContributor(rctx, fc.Args["userId"].(string), fc.Args["input"].(model.UpdateContributor))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -654,7 +1004,7 @@ func (ec *executionContext) _Mutation_updateContributorById(ctx context.Context,
 	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_updateContributorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updateAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -662,14 +1012,16 @@ func (ec *executionContext) fieldContext_Mutation_updateContributorById(ctx cont
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contributor_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_Contributor_userId(ctx, field)
 			case "githubUsername":
 				return ec.fieldContext_Contributor_githubUsername(ctx, field)
 			case "name":
 				return ec.fieldContext_Contributor_name(ctx, field)
 			case "email":
 				return ec.fieldContext_Contributor_email(ctx, field)
+			case "contributions":
+				return ec.fieldContext_Contributor_contributions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contributor", field.Name)
 		},
@@ -681,15 +1033,15 @@ func (ec *executionContext) fieldContext_Mutation_updateContributorById(ctx cont
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateContributorById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updateAContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_deleteContributor(ctx, field)
+func (ec *executionContext) _Mutation_deleteAContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteAContributor(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -702,7 +1054,7 @@ func (ec *executionContext) _Mutation_deleteContributor(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteContributor(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteAContributor(rctx, fc.Args["userId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -719,7 +1071,7 @@ func (ec *executionContext) _Mutation_deleteContributor(ctx context.Context, fie
 	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_deleteContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_deleteAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -727,14 +1079,16 @@ func (ec *executionContext) fieldContext_Mutation_deleteContributor(ctx context.
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contributor_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_Contributor_userId(ctx, field)
 			case "githubUsername":
 				return ec.fieldContext_Contributor_githubUsername(ctx, field)
 			case "name":
 				return ec.fieldContext_Contributor_name(ctx, field)
 			case "email":
 				return ec.fieldContext_Contributor_email(ctx, field)
+			case "contributions":
+				return ec.fieldContext_Contributor_contributions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contributor", field.Name)
 		},
@@ -746,7 +1100,137 @@ func (ec *executionContext) fieldContext_Mutation_deleteContributor(ctx context.
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_deleteAContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteAContribution(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteAContribution(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteAContribution(rctx, fc.Args["userId"].(string), fc.Args["contributionId"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Contribution)
+	fc.Result = res
+	return ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteAContribution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "contributionId":
+				return ec.fieldContext_Contribution_contributionId(ctx, field)
+			case "projectName":
+				return ec.fieldContext_Contribution_projectName(ctx, field)
+			case "type":
+				return ec.fieldContext_Contribution_type(ctx, field)
+			case "date":
+				return ec.fieldContext_Contribution_date(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contribution", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteAContribution_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_addAContribution(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_addAContribution(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddAContribution(rctx, fc.Args["userId"].(string), fc.Args["input"].(model.NewContribution))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Contribution)
+	fc.Result = res
+	return ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_addAContribution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "contributionId":
+				return ec.fieldContext_Contribution_contributionId(ctx, field)
+			case "projectName":
+				return ec.fieldContext_Contribution_projectName(ctx, field)
+			case "type":
+				return ec.fieldContext_Contribution_type(ctx, field)
+			case "date":
+				return ec.fieldContext_Contribution_date(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contribution", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_addAContribution_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -792,14 +1276,16 @@ func (ec *executionContext) fieldContext_Query_getAllContributors(ctx context.Co
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contributor_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_Contributor_userId(ctx, field)
 			case "githubUsername":
 				return ec.fieldContext_Contributor_githubUsername(ctx, field)
 			case "name":
 				return ec.fieldContext_Contributor_name(ctx, field)
 			case "email":
 				return ec.fieldContext_Contributor_email(ctx, field)
+			case "contributions":
+				return ec.fieldContext_Contributor_contributions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contributor", field.Name)
 		},
@@ -807,8 +1293,8 @@ func (ec *executionContext) fieldContext_Query_getAllContributors(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getAContributorById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getAContributorById(ctx, field)
+func (ec *executionContext) _Query_getAContributor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAContributor(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -821,7 +1307,7 @@ func (ec *executionContext) _Query_getAContributorById(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAContributorByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetAContributor(rctx, fc.Args["userId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -838,7 +1324,7 @@ func (ec *executionContext) _Query_getAContributorById(ctx context.Context, fiel
 	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getAContributorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -846,14 +1332,16 @@ func (ec *executionContext) fieldContext_Query_getAContributorById(ctx context.C
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contributor_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_Contributor_userId(ctx, field)
 			case "githubUsername":
 				return ec.fieldContext_Contributor_githubUsername(ctx, field)
 			case "name":
 				return ec.fieldContext_Contributor_name(ctx, field)
 			case "email":
 				return ec.fieldContext_Contributor_email(ctx, field)
+			case "contributions":
+				return ec.fieldContext_Contributor_contributions(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Contributor", field.Name)
 		},
@@ -865,7 +1353,7 @@ func (ec *executionContext) fieldContext_Query_getAContributorById(ctx context.C
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getAContributorById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_getAContributor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -2774,8 +3262,111 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputNewContribution(ctx context.Context, obj interface{}) (model.NewContribution, error) {
+	var it model.NewContribution
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"projectName", "type", "date"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "projectName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("projectName"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProjectName = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "date":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Date = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewContributor(ctx context.Context, obj interface{}) (model.NewContributor, error) {
 	var it model.NewContributor
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"githubUsername", "name", "email", "contributions"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "githubUsername":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("githubUsername"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.GithubUsername = data
+		case "name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "email":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "contributions":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contributions"))
+			data, err := ec.unmarshalONewContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Contributions = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateContributor(ctx context.Context, obj interface{}) (model.UpdateContributor, error) {
+	var it model.UpdateContributor
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -2829,6 +3420,55 @@ func (ec *executionContext) unmarshalInputNewContributor(ctx context.Context, ob
 
 // region    **************************** object.gotpl ****************************
 
+var contributionImplementors = []string{"Contribution"}
+
+func (ec *executionContext) _Contribution(ctx context.Context, sel ast.SelectionSet, obj *model.Contribution) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, contributionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Contribution")
+		case "contributionId":
+
+			out.Values[i] = ec._Contribution_contributionId(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "projectName":
+
+			out.Values[i] = ec._Contribution_projectName(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "type":
+
+			out.Values[i] = ec._Contribution_type(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "date":
+
+			out.Values[i] = ec._Contribution_date(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var contributorImplementors = []string{"Contributor"}
 
 func (ec *executionContext) _Contributor(ctx context.Context, sel ast.SelectionSet, obj *model.Contributor) graphql.Marshaler {
@@ -2839,9 +3479,9 @@ func (ec *executionContext) _Contributor(ctx context.Context, sel ast.SelectionS
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Contributor")
-		case "id":
+		case "userId":
 
-			out.Values[i] = ec._Contributor_id(ctx, field, obj)
+			out.Values[i] = ec._Contributor_userId(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -2867,6 +3507,10 @@ func (ec *executionContext) _Contributor(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "contributions":
+
+			out.Values[i] = ec._Contributor_contributions(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2897,28 +3541,46 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "addContributor":
+		case "addAContributor":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_addContributor(ctx, field)
+				return ec._Mutation_addAContributor(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "updateContributorById":
+		case "updateAContributor":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateContributorById(ctx, field)
+				return ec._Mutation_updateAContributor(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "deleteContributor":
+		case "deleteAContributor":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteContributor(ctx, field)
+				return ec._Mutation_deleteAContributor(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "deleteAContribution":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteAContribution(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "addAContribution":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_addAContribution(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
@@ -2977,7 +3639,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "getAContributorById":
+		case "getAContributor":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2986,7 +3648,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getAContributorById(ctx, field)
+				res = ec._Query_getAContributor(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -3356,6 +4018,20 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v model.Contribution) graphql.Marshaler {
+	return ec._Contribution(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v *model.Contribution) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Contribution(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx context.Context, sel ast.SelectionSet, v model.Contributor) graphql.Marshaler {
 	return ec._Contributor(ctx, sel, &v)
 }
@@ -3429,6 +4105,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) unmarshalNNewContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (model.NewContribution, error) {
+	res, err := ec.unmarshalInputNewContribution(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNNewContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx context.Context, v interface{}) (model.NewContributor, error) {
 	res, err := ec.unmarshalInputNewContributor(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3447,6 +4128,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx context.Context, v interface{}) (model.UpdateContributor, error) {
+	res, err := ec.unmarshalInputUpdateContributor(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -3726,6 +4412,61 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Contribution) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalONewContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (*model.NewContribution, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputNewContribution(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

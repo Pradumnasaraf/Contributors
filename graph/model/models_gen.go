@@ -2,14 +2,35 @@
 
 package model
 
+type Contribution struct {
+	ContributionID string `json:"contributionId" bson:"contributionId"`
+	ProjectName    string `json:"projectName"`
+	Type           string `json:"type"`
+	Date           string `json:"date"`
+}
+
 type Contributor struct {
-	ID             string `json:"id" bson:"_id"`
-	GithubUsername string `json:"githubUsername"`
-	Name           string `json:"name"`
-	Email          string `json:"email"`
+	UserID         string          `json:"userId" bson:"_id"`
+	GithubUsername string          `json:"githubUsername"`
+	Name           string          `json:"name"`
+	Email          string          `json:"email"`
+	Contributions  []*Contribution `json:"contributions,omitempty"`
+}
+
+type NewContribution struct {
+	ProjectName string `json:"projectName"`
+	Type        string `json:"type"`
+	Date        string `json:"date"`
 }
 
 type NewContributor struct {
+	GithubUsername string           `json:"githubUsername"`
+	Name           string           `json:"name"`
+	Email          string           `json:"email"`
+	Contributions  *NewContribution `json:"contributions,omitempty"`
+}
+
+type UpdateContributor struct {
 	GithubUsername string `json:"githubUsername"`
 	Name           string `json:"name"`
 	Email          string `json:"email"`
