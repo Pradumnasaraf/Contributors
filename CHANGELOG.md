@@ -1,4 +1,4 @@
-# [0.1.0](https://github.com/Pradumnasaraf/Contributors/compare/v0.2.2...v0.1.0) (2023-05-27)
+# [1.1.0](https://github.com/Pradumnasaraf/Contributors/compare/v1.0.0...v1.1.0) (2023-05-30)
 
 
 ### Bug Fixes
@@ -10,9 +10,11 @@
 
 ### Features
 
+* Add contribution schema ([62ab8b8](https://github.com/Pradumnasaraf/Contributors/commit/62ab8b887d555bb60731ad18e4736039d7a3572b))
 * Add gin as web framework ([7c395e3](https://github.com/Pradumnasaraf/Contributors/commit/7c395e38fc094db5f3cda5ae5613990248daa8f1))
 * add gin basicauth ([f1ec398](https://github.com/Pradumnasaraf/Contributors/commit/f1ec39816fc144900764e95f436510ed8b88dcb8))
 * Add support for graphql ([b71d56c](https://github.com/Pradumnasaraf/Contributors/commit/b71d56c42f90eb5c17071558a0fb83fe7ecf0e1d))
+* bump version + update release action ([2b7691a](https://github.com/Pradumnasaraf/Contributors/commit/2b7691a2e797fbdd0efe915fd06dc4630b5893c3))
 
 
 
