@@ -1,8 +1,8 @@
-name: Publish Image to GitHub Container Registry
+name: Publish Package - GHCR
 
 on:
-  push:
-    branches: ["main"]
+  release:
+    types: [published]
 
 env:
   REGISTRY: ghcr.io
@@ -32,10 +32,18 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      - name: Read YAML file for version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: read_yaml
+        with:
+          config: ${{ github.workspace }}/version.yaml
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/pradumnasaraf/contributors:latest
+          tags: | 
+            ghcr.io/pradumnasaraf/contributors:latest
+            ghcr.io/pradumnasaraf/contributors:${{ steps.read_yaml.outputs['version'] }}
           labels: ${{ steps.meta.outputs.labels }}
