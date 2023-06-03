@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/Pradumnasaraf/Contributors/graph"
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/Contributors/graph"
 )
 
 // Graphql handler

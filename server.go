@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
+	"github.com/Pradumnasaraf/Contributors/config"
+	"github.com/Pradumnasaraf/Contributors/handler"
+	"github.com/Pradumnasaraf/Contributors/middleware"
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/Contributors/config"
-	"github.com/pradumnasaraf/Contributors/handler"
-	"github.com/pradumnasaraf/Contributors/middleware"
 )
 
 func main() {
@@ -21,4 +21,5 @@ func main() {
 
 	// Auto catch the PORT variable if it exists
 	log.Fatal(router.Run())
+
 }

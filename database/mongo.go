@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/pradumnasaraf/Contributors/config"
-	"github.com/pradumnasaraf/Contributors/graph/model"
+	"github.com/Pradumnasaraf/Contributors/config"
+	"github.com/Pradumnasaraf/Contributors/graph/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
