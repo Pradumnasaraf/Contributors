@@ -8,4 +8,5 @@ Dockerfile
 SECURITY.md
 .gitpod.yml
 .gitpod.Dockerfile
-releases.json
+version.yaml
+```
