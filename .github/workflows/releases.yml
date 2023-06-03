@@ -6,6 +6,7 @@ on:
 
 jobs:
   changelog:
+    name: Create Release and Changelog
     runs-on: ubuntu-latest
 
     steps:
