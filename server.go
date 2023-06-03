@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	var name string = "Pradumna Saraf"
 	// Load .env file
 	config.Config()
 
