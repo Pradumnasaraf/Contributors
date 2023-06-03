@@ -1,3 +1,12 @@
+## [1.1.2](https://github.com/Pradumnasaraf/Contributors/compare/v1.1.1...v1.1.2) (2023-06-03)
+
+
+### Bug Fixes
+
+* module name + bump go version ([#7](https://github.com/Pradumnasaraf/Contributors/issues/7)) ([9396ebf](https://github.com/Pradumnasaraf/Contributors/commit/9396ebfc4d3e962b9b2fffe0a70deaba9d4b189f))
+
+
+
 ## [1.1.1](https://github.com/Pradumnasaraf/Contributors/compare/v1.1.0...v1.1.1) (2023-05-31)
 
 
@@ -33,15 +42,6 @@
 ### Bug Fixes
 
 * the port ENV ([d831c5f](https://github.com/Pradumnasaraf/Contributors/commit/d831c5f50bc6c61b1a1c6fb9df91d0924452f8cd))
-
-
-
-## [0.2.1](https://github.com/Pradumnasaraf/Contributors/compare/v0.2.0...v0.2.1) (2023-02-22)
-
-
-### Bug Fixes
-
-* .dockerignore ([5ab773e](https://github.com/Pradumnasaraf/Contributors/commit/5ab773ef6ad151a6ed7361478fc527a9f6c1b2fc))
 
 
 
