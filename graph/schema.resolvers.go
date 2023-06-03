@@ -8,8 +8,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pradumnasaraf/Contributors/database"
-	"github.com/pradumnasaraf/Contributors/graph/model"
+	"github.com/Pradumnasaraf/Contributors/database"
+	"github.com/Pradumnasaraf/Contributors/graph/model"
 )
 
 // AddAContributor is the resolver for the addAContributor field.

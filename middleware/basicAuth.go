@@ -3,8 +3,8 @@ package middleware
 import (
 	"os"
 
+	"github.com/Pradumnasaraf/Contributors/config"
 	"github.com/gin-gonic/gin"
-	"github.com/pradumnasaraf/Contributors/config"
 )
 
 func BasicAuth() gin.HandlerFunc {
