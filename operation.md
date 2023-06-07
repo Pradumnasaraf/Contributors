@@ -8,7 +8,7 @@ Purpose of this file is to provide the information about the operations that can
 
 ```graphql
 query getContributor {
-  getContributor(userId: "1") {
+  getAContributor(userId: "1") {
     userId
     githubUsername
     name
@@ -75,7 +75,7 @@ query getAllContributors {
 mutation addContributor {
   addAContributor(
     input: {
-      githubUsername: "user1"
+      githubUsername: "Pradummnasaraf"
       name: "Pradumna Saraf"
       email: "pradumnasaraf@gmail.com"
     }
@@ -94,7 +94,7 @@ mutation addContributor {
 mutation addContributor_contributions {
   addAContributor(
     input: {
-      githubUsername: "user1"
+      githubUsername: "Pradummnasaraf"
       name: "Pradumna Saraf"
       email: "pradumnasaraf@gmail.com"
       contributions: {
@@ -153,9 +153,19 @@ mutation deleteContributor {
 ```graphql
 mutation addcontributions {
   addAContribution(
-    userId: "Pradumnasaraf"
+    userId: "UPradumnasaraf"
     input: { projectName: "UPradumnasaraf/DevOps", type: "code", date: "2023" }
   ) {
+    contributionId
+  }
+}
+```
+
+### Delete a contribution by ContributionId
+
+```graphql
+mutation deleteContribution {
+  deleteAContribution(userId: "UPradumnasaraf", contributionId: "CPradumnasaraf/DevOps") {
     contributionId
   }
 }
