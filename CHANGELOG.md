@@ -1,3 +1,12 @@
+## [1.1.3](https://github.com/Pradumnasaraf/Contributors/compare/v1.1.2...v1.1.3) (2023-06-23)
+
+
+### Bug Fixes
+
+* function naming and update bson key ([3ffe892](https://github.com/Pradumnasaraf/Contributors/commit/3ffe89258c972b5ef0786dd604d635e582c98835))
+
+
+
 ## [1.1.2](https://github.com/Pradumnasaraf/Contributors/compare/v1.1.1...v1.1.2) (2023-06-03)
 
 
@@ -33,15 +42,6 @@
 * add gin basicauth ([f1ec398](https://github.com/Pradumnasaraf/Contributors/commit/f1ec39816fc144900764e95f436510ed8b88dcb8))
 * Add support for graphql ([b71d56c](https://github.com/Pradumnasaraf/Contributors/commit/b71d56c42f90eb5c17071558a0fb83fe7ecf0e1d))
 * bump version + update release action ([2b7691a](https://github.com/Pradumnasaraf/Contributors/commit/2b7691a2e797fbdd0efe915fd06dc4630b5893c3))
-
-
-
-## [0.2.2](https://github.com/Pradumnasaraf/Contributors/compare/v0.2.1...v0.2.2) (2023-03-20)
-
-
-### Bug Fixes
-
-* the port ENV ([d831c5f](https://github.com/Pradumnasaraf/Contributors/commit/d831c5f50bc6c61b1a1c6fb9df91d0924452f8cd))
 
 
 
