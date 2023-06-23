@@ -129,12 +129,12 @@ func (db *MongoDB) DeleteByID(userId string) error {
 
 // DELETE contribution by ID
 func (db *MongoDB) DeleteContributionByID(userId string, contributionID string) error {
-	filter := bson.M{"_id": userId, "contributions.contributionId": contributionID}
-	update := bson.M{"$pull": bson.M{"contributions": bson.M{"contributionId": contributionID}}}
+	filter := bson.M{"_id": userId, "contributions.contributionid": contributionID}
+	update := bson.M{"$pull": bson.M{"contributions": bson.M{"contributionid": contributionID}}}
 	result, _ := Collection.UpdateOne(context.Background(), filter, update)
 
 	if result.MatchedCount == 0 {
-		return errors.New("document not found. Document with the given ID may not exist")
+		return errors.New("document not found. Document with the given ID may not exist or contribution with the given ID may not exist")
 	}
 
 	return nil
@@ -142,12 +142,12 @@ func (db *MongoDB) DeleteContributionByID(userId string, contributionID string) 
 
 // ADD contribution by ID
 func (db *MongoDB) AddContributionByID(userId string, contribution *model.Contribution) error {
-	filter := bson.M{"_id": userId, "contributions.contributionId": bson.M{"$ne": contribution.ContributionID}}
+	filter := bson.M{"_id": userId, "contributions.contributionid": bson.M{"$ne": contribution.ContributionID}}
 	update := bson.M{"$push": bson.M{"contributions": contribution}}
 	result, _ := Collection.UpdateOne(Ctx, filter, update)
 
 	if result.MatchedCount == 0 {
-		return errors.New("document not found. Document with the given ID may not exist")
+		return errors.New("could not add contribution. User with the given ID may not exist or contribution with the given ID may already exist")
 	}
 
 	return nil

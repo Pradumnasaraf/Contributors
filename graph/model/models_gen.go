@@ -3,7 +3,7 @@
 package model
 
 type Contribution struct {
-	ContributionID string `json:"contributionId" bson:"contributionId"`
+	ContributionID string `json:"contributionid" bson:"contributionid"`
 	ProjectName    string `json:"projectName"`
 	Type           string `json:"type"`
 	Date           string `json:"date"`

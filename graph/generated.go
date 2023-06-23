@@ -348,7 +348,7 @@ func (ec *executionContext) field_Mutation_addAContribution_args(ctx context.Con
 	var arg1 model.NewContribution
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNNewContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, tmp)
+		arg1, err = ec.unmarshalNNewContribution2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -363,7 +363,7 @@ func (ec *executionContext) field_Mutation_addAContributor_args(ctx context.Cont
 	var arg0 model.NewContributor
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx, tmp)
+		arg0, err = ec.unmarshalNNewContributor2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -426,7 +426,7 @@ func (ec *executionContext) field_Mutation_updateAContributor_args(ctx context.C
 	var arg1 model.UpdateContributor
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateContributor2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -880,7 +880,7 @@ func (ec *executionContext) _Contributor_contributions(ctx context.Context, fiel
 	}
 	res := resTmp.([]*model.Contribution)
 	fc.Result = res
-	return ec.marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx, field.Selections, res)
+	return ec.marshalOContribution2ᚕᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Contributor_contributions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -934,7 +934,7 @@ func (ec *executionContext) _Mutation_addAContributor(ctx context.Context, field
 	}
 	res := resTmp.(*model.Contributor)
 	fc.Result = res
-	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
+	return ec.marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_addAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1001,7 +1001,7 @@ func (ec *executionContext) _Mutation_updateAContributor(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Contributor)
 	fc.Result = res
-	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
+	return ec.marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1068,7 +1068,7 @@ func (ec *executionContext) _Mutation_deleteAContributor(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Contributor)
 	fc.Result = res
-	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
+	return ec.marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_deleteAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1135,7 +1135,7 @@ func (ec *executionContext) _Mutation_deleteAContribution(ctx context.Context, f
 	}
 	res := resTmp.(*model.Contribution)
 	fc.Result = res
-	return ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
+	return ec.marshalNContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_deleteAContribution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1200,7 +1200,7 @@ func (ec *executionContext) _Mutation_addAContribution(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.Contribution)
 	fc.Result = res
-	return ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
+	return ec.marshalNContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_addAContribution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1265,7 +1265,7 @@ func (ec *executionContext) _Query_getAllContributors(ctx context.Context, field
 	}
 	res := resTmp.([]*model.Contributor)
 	fc.Result = res
-	return ec.marshalNContributor2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributorᚄ(ctx, field.Selections, res)
+	return ec.marshalNContributor2ᚕᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributorᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAllContributors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1321,7 +1321,7 @@ func (ec *executionContext) _Query_getAContributor(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Contributor)
 	fc.Result = res
-	return ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
+	return ec.marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAContributor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3354,7 +3354,7 @@ func (ec *executionContext) unmarshalInputNewContributor(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contributions"))
-			data, err := ec.unmarshalONewContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, v)
+			data, err := ec.unmarshalONewContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4018,11 +4018,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v model.Contribution) graphql.Marshaler {
+func (ec *executionContext) marshalNContribution2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v model.Contribution) graphql.Marshaler {
 	return ec._Contribution(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v *model.Contribution) graphql.Marshaler {
+func (ec *executionContext) marshalNContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx context.Context, sel ast.SelectionSet, v *model.Contribution) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4032,11 +4032,11 @@ func (ec *executionContext) marshalNContribution2ᚖgithubᚗcomᚋpradumnasaraf
 	return ec._Contribution(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx context.Context, sel ast.SelectionSet, v model.Contributor) graphql.Marshaler {
+func (ec *executionContext) marshalNContributor2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx context.Context, sel ast.SelectionSet, v model.Contributor) graphql.Marshaler {
 	return ec._Contributor(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNContributor2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributorᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Contributor) graphql.Marshaler {
+func (ec *executionContext) marshalNContributor2ᚕᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributorᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Contributor) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4060,7 +4060,7 @@ func (ec *executionContext) marshalNContributor2ᚕᚖgithubᚗcomᚋpradumnasar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, sel, v[i])
+			ret[i] = ec.marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4080,7 +4080,7 @@ func (ec *executionContext) marshalNContributor2ᚕᚖgithubᚗcomᚋpradumnasar
 	return ret
 }
 
-func (ec *executionContext) marshalNContributor2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx context.Context, sel ast.SelectionSet, v *model.Contributor) graphql.Marshaler {
+func (ec *executionContext) marshalNContributor2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributor(ctx context.Context, sel ast.SelectionSet, v *model.Contributor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4105,12 +4105,12 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewContribution2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (model.NewContribution, error) {
+func (ec *executionContext) unmarshalNNewContribution2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (model.NewContribution, error) {
 	res, err := ec.unmarshalInputNewContribution(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx context.Context, v interface{}) (model.NewContributor, error) {
+func (ec *executionContext) unmarshalNNewContributor2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContributor(ctx context.Context, v interface{}) (model.NewContributor, error) {
 	res, err := ec.unmarshalInputNewContributor(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -4130,7 +4130,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) unmarshalNUpdateContributor2githubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx context.Context, v interface{}) (model.UpdateContributor, error) {
+func (ec *executionContext) unmarshalNUpdateContributor2githubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐUpdateContributor(ctx context.Context, v interface{}) (model.UpdateContributor, error) {
 	res, err := ec.unmarshalInputUpdateContributor(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -4414,7 +4414,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Contribution) graphql.Marshaler {
+func (ec *executionContext) marshalOContribution2ᚕᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContributionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Contribution) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4441,7 +4441,7 @@ func (ec *executionContext) marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasa
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, sel, v[i])
+			ret[i] = ec.marshalNContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐContribution(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4461,7 +4461,7 @@ func (ec *executionContext) marshalOContribution2ᚕᚖgithubᚗcomᚋpradumnasa
 	return ret
 }
 
-func (ec *executionContext) unmarshalONewContribution2ᚖgithubᚗcomᚋpradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (*model.NewContribution, error) {
+func (ec *executionContext) unmarshalONewContribution2ᚖgithubᚗcomᚋPradumnasarafᚋContributorsᚋgraphᚋmodelᚐNewContribution(ctx context.Context, v interface{}) (*model.NewContribution, error) {
 	if v == nil {
 		return nil, nil
 	}
