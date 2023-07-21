@@ -40,43 +40,14 @@ To retrieve a specific contributor, such as U1, you can use the document created
 
 ### addAContributor
 
-To add a new contributor, create the following document in your MongoDB collection:
+Test Will Automatically Add a Contributor and Delete it after the test is completed.
 
-```json
-{
-  "_id": "U4",
-  "githubusername": "4",
-  "name": "user4",
-  "email": "test@test.com",
-  "contributions": []
-}
-```
-
-```json
-{
-  "_id": "U5",
-  "githubusername": "5",
-  "name": "user5",
-  "email": "test@test.com",
-  "contributions": []
-}
-```
 
 After adding these documents, make sure to delete them as mentioned in the next sections.
 
 ### addAContribution
 
-To add a contribution for a contributor (e.g., U6), use the following document in your MongoDB collection:
-
-```json
-{
-  "_id": "U6",
-  "githubusername": "6",
-  "name": "user6",
-  "email": "test@test.com",
-  "contributions": []
-}
-```
+Test Will Automatically Add a Contribution and Delete it after the test is completed.
 
 ### deleteAContributor
 
