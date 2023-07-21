@@ -7,7 +7,7 @@ Purpose of this file is to provide the information about the operations that can
 - By directly passing the Argument (userId)
 
 ```graphql
-query getContributor {
+query getAContributor {
   getAContributor(userId: "1") {
     userId
     githubUsername
@@ -72,10 +72,10 @@ query getAllContributors {
 ### Add a contributor - without contributions
 
 ```graphql
-mutation addContributor {
+mutation addAContributor {
   addAContributor(
     input: {
-      githubUsername: "Pradummnasaraf"
+      githubUsername: "Pradumnasaraf"
       name: "Pradumna Saraf"
       email: "pradumnasaraf@gmail.com"
     }
@@ -94,7 +94,7 @@ mutation addContributor {
 mutation addContributor_contributions {
   addAContributor(
     input: {
-      githubUsername: "Pradummnasaraf"
+      githubUsername: "Pradumnasaraf"
       name: "Pradumna Saraf"
       email: "pradumnasaraf@gmail.com"
       contributions: {
@@ -121,13 +121,13 @@ mutation addContributor_contributions {
 ### Update a contributor
 
 ```graphql
-mutation updateConbributor {
+mutation updateAConbributor {
   updateAContributor(
-    userId: "UPradummnasaraf"
+    userId: "UPradumnasaraf"
     input: {
       name: "Pradumna Saraf"
       email: "pradumnasaraf@gmail.com"
-      githubUsername: "Pradummnasaraf"
+      githubUsername: "Pradumnasaraf"
     }
   ) {
     userId
@@ -141,17 +141,17 @@ mutation updateConbributor {
 ### Delete a contributor
 
 ```graphql
-mutation deleteContributor {
-  deleteAContributor(userId: "UPradummnasaraf") {
+mutation DeleteAContributor {
+  deleteAContributor(userId: "UPradumnasaraf") {
     userId
   }
 }
 ```
 
-### Add a contribution by ContributorId
+### Add a contribution by userId
 
 ```graphql
-mutation addcontributions {
+mutation addAcontributions {
   addAContribution(
     userId: "UPradumnasaraf"
     input: { projectName: "UPradumnasaraf/DevOps", type: "code", date: "2023" }

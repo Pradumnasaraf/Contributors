@@ -1,0 +1,27 @@
+name: Unit Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build-format:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    env:
+      MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+      MONGO_DB: opensource
+      MONGO_COLLECTION: contributors
+      PORT: 8000
+      GIN_MODE: release
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+      - name: Test
+        run: go test -v ./tests/...

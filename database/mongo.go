@@ -104,7 +104,7 @@ func (db *MongoDB) GetByID(userId string) (*model.Contributor, error) {
 // UPDATE a contributor by ID
 func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
 	filter := bson.M{"_id": contributor.UserID}
-	update := bson.M{"$set": bson.M{"githubUsername": contributor.GithubUsername, "name": contributor.Name, "email": contributor.Email}}
+	update := bson.M{"$set": bson.M{"githubusername": contributor.GithubUsername, "name": contributor.Name, "email": contributor.Email}}
 	result, _ := Collection.UpdateOne(context.Background(), filter, update)
 
 	if result.MatchedCount == 0 {
