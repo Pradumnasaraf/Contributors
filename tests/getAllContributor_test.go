@@ -13,6 +13,7 @@ import (
 
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/gin-gonic/gin"
+	"github.com/magiconair/properties/assert"
 )
 
 func TestGetAllContributor(t *testing.T) {
@@ -43,9 +44,7 @@ func TestGetAllContributor(t *testing.T) {
 			r.ServeHTTP(w, tc.Request)
 
 			// Check the response status code
-			if w.Code != tc.ExpectedStatus {
-				t.Errorf("Expected status code %d, but got %d", tc.ExpectedStatus, w.Code)
-			}
+			assert.Equal(t, tc.ExpectedStatus, w.Code, "Status code")
 
 			// Check the response body
 			var response map[string]interface{}
