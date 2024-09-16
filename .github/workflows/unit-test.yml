@@ -22,8 +22,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install MongoDB Database Tools
-        run: sudo apt-get install -y mongodb-database-tools
+      - name: Setup mongodb-tools
+        run: |
+          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.6.1.deb
+          sudo apt install ./mongodb-database-tools-*-100.6.1.deb
+          mongorestore --version
 
       - name: Migrate database
         run: mongoimport --db test --collection contributors --file ./tests/testdata.json --jsonArray --drop
