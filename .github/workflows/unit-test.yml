@@ -11,7 +11,11 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     env:
-      GIN_MODE: release
+      MONGO_URI: mongodb://localhost:27017
+      MONGO_DB: opensource
+      MONGO_COLLECTION: contributors
+      BASIC_AUTH_USERNAME: user
+      BASIC_AUTH_PASSWORD: pass
     steps:
       - name: MongoDB
         uses: supercharge/mongodb-github-action@v1
@@ -35,5 +39,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.23
-      - name: Test
+
+      - name: Run Unit Tests
         run: go test -v ./tests/...
