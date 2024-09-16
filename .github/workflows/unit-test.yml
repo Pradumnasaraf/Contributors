@@ -16,6 +16,7 @@ jobs:
       MONGO_COLLECTION: contributors
       BASIC_AUTH_USERNAME: user
       BASIC_AUTH_PASSWORD: pass
+      
     steps:
       - name: MongoDB
         uses: supercharge/mongodb-github-action@v1
