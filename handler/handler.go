@@ -26,3 +26,11 @@ func PlaygroundHandler() gin.HandlerFunc {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
 }
+
+func HealthCheckHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "healthy",
+		})
+	}
+}

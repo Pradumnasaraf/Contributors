@@ -1,0 +1,44 @@
+services:
+  api:
+    container_name: go-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: go-api
+    ports:
+      - 8080:8080
+    env_file:
+      - .env.example
+    environment:
+      - MONGO_URI=mongodb://db:27017
+    networks:
+      - go-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    container_name: go-mongodb
+    image: mongo:7.0.0
+    volumes:  
+      - dbdata:/data/db
+    networks:
+      - go-network
+    healthcheck:
+      test: ["CMD", "pgrep", "mongod"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+volumes:
+  dbdata:
+
+networks:
+  go-network:
+    driver: bridge

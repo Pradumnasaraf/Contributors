@@ -14,6 +14,7 @@ func main() {
 
 	router.Use(middleware.BasicAuth())
 	router.GET("/", handler.PlaygroundHandler())
+	router.GET("/health", handler.HealthCheckHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
 	log.Fatal(router.Run())

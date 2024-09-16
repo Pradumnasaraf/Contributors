@@ -1,4 +1,4 @@
-FROM golang:1.19.5-alpine3.17 AS builder
+FROM golang:1.23-alpine AS builder
 WORKDIR /build
 EXPOSE 8081
 COPY go.mod go.sum ./
