@@ -101,5 +101,5 @@ To update a contributor (e.g., U9), create the following document in your MongoD
 To migrate all the data into the MongoDB, run the following command:
 
 ```bash
-mongoimport --db test --collection contributors --file testdata.json --jsonArray --drop
+mongoimport --db opensource --collection contributors --file testdata.json --jsonArray --drop
 ```
