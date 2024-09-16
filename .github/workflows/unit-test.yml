@@ -41,5 +41,8 @@ jobs:
         with:
           go-version: 1.23
 
+      - name: Clear Test Cache
+        run: go clean -testcache
+
       - name: Run Unit Tests
         run: go test -v ./tests/...
