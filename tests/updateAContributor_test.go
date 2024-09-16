@@ -75,8 +75,4 @@ func TestUpdateAContributor(t *testing.T) {
 			}
 		})
 	}
-
-	// Update the contributor back to original state
-	UpdateModifiedContributor()
-
 }

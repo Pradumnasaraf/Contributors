@@ -11,17 +11,38 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     env:
-      MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+      MONGO_URI: mongodb://localhost:27017
       MONGO_DB: opensource
       MONGO_COLLECTION: contributors
-      PORT: 8000
-      GIN_MODE: release
+      BASIC_AUTH_USERNAME: user
+      BASIC_AUTH_PASSWORD: pass
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - name: MongoDB
+        uses: supercharge/mongodb-github-action@v1
         with:
-          go-version: 1.19
-      - name: Test
+          mongodb-version: '7.0'
+          mongodb-port: 27017
+      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup mongodb-tools
+        run: |
+          wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.6.1.deb
+          sudo apt install ./mongodb-database-tools-*-100.6.1.deb
+          mongorestore --version
+
+      - name: Migrate database
+        run: mongoimport --db $MONGO_DB --collection $MONGO_COLLECTION --file ./tests/testdata.json --jsonArray --drop
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+
+      - name: Clear Test Cache
+        run: go clean -testcache
+
+      - name: Run Unit Tests
         run: go test -v ./tests/...

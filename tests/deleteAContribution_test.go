@@ -76,7 +76,4 @@ func TestDeleteAContribution(t *testing.T) {
 		})
 	}
 
-	// This will add deleted contribution back to the database
-	AddDeletedContribution()
-
 }

@@ -98,4 +98,8 @@ To update a contributor (e.g., U9), create the following document in your MongoD
 }
 ```
 
-Or you can import the test data directly in MongoDB from the file `tests/testdata.json`.
+To migrate all the data into the MongoDB, run the following command:
+
+```bash
+mongoimport --db opensource --collection contributors --file testdata.json --jsonArray --drop
+```
