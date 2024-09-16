@@ -16,7 +16,5 @@ func main() {
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
-	// Auto catch the PORT variable if it exists
 	log.Fatal(router.Run())
-
 }
