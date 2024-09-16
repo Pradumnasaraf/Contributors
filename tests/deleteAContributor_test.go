@@ -76,7 +76,4 @@ func TestDeleteAContributor(t *testing.T) {
 		})
 	}
 
-	// This will add the deleted contributor back to the database
-	AddDeletedContributor()
-
 }

@@ -23,7 +23,7 @@ func TestAddAContributor(t *testing.T) {
 	// Test case for getAContributor
 	testCases := []APITestCase{
 		{
-			Name: "Valid GraphQL Request - getAContributor",
+			Name: "Valid GraphQL Request - addAContributor - without contributions",
 			Request: func() *http.Request {
 				requestBody := bytes.NewBufferString(`{"query": "mutation AddAContributor { addAContributor(input: { githubUsername: \"4\" name: \"user4\" email: \"test@test.com\" }) { userId } }"}`)
 				req, _ := http.NewRequest("POST", "/graphql", requestBody)
@@ -34,7 +34,7 @@ func TestAddAContributor(t *testing.T) {
 			ExpectedBody:   `{"data": {"addAContributor": {"userId": "U4"}}}`,
 		},
 		{
-			Name: "Valid GraphQL Request - getAContributor - with contributions",
+			Name: "Valid GraphQL Request - addAContributor - with contributions",
 			Request: func() *http.Request {
 				requestBody := bytes.NewBufferString(`{"query": "mutation AddAContributor { addAContributor(input: { githubUsername: \"5\", name: \"user4\", email: \"test@test.com\" contributions: { projectName: \"test/test\", type: \"code\", date: \"2020-01-01\" } }) { userId contributions { contributionId } } }"}`)
 				req, _ := http.NewRequest("POST", "/graphql", requestBody)
@@ -45,7 +45,7 @@ func TestAddAContributor(t *testing.T) {
 			ExpectedBody:   `{"data": {"addAContributor": {"userId": "U5","contributions": [{"contributionId": "Ctest/test"}]}}}`,
 		},
 		{
-			Name: "Invalid GraphQL Request - getAContributor - without githubUsername",
+			Name: "Invalid GraphQL Request - addAContributor - without githubUsername",
 			Request: func() *http.Request {
 				requestBody := bytes.NewBufferString(`{"query": "mutation AddAContributor { addAContributor(input: { name: \"user4\" email: \"test@gmail.com\" }) { userId } }"}`)
 				req, _ := http.NewRequest("POST", "/graphql", requestBody)
@@ -86,8 +86,4 @@ func TestAddAContributor(t *testing.T) {
 			}
 		})
 	}
-
-	// Dlete the user created in the test from DB
-	DeleteAddedContributor("U4")
-	DeleteAddedContributor("U5")
 }

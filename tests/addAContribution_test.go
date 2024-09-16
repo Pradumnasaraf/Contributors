@@ -65,7 +65,4 @@ func TestAddAContribution(t *testing.T) {
 		})
 	}
 
-	// Delete the added contribution from the DB
-	DeleteAddedContribution("U6", "Ctest/test")
-
 }
