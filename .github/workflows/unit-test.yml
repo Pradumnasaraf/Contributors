@@ -34,7 +34,7 @@ jobs:
           mongorestore --version
 
       - name: Migrate database
-        run: mongoimport --db test --collection contributors --file ./tests/testdata.json --jsonArray --drop
+        run: mongoimport --db opensource --collection contributors --file ./tests/testdata.json --jsonArray --drop
 
       - name: Setup Go
         uses: actions/setup-go@v5
