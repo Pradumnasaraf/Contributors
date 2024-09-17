@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+  namespace: api
+data:
+  PORT: "8080"
+  MONGO_URI: "mongodb://mongodb-service.db.svc.cluster.local:27017/contributor"
+  MONGO_DB: "opensource"
+  MONGO_COLLECTION: "contributors"
+  GIN_MODE: "release"
+  BASIC_AUTH_PASSWORD: "pass"
+  BASIC_AUTH_USERNAME: "user"
+

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contributor-app-deployment
+  namespace: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: contributor-app
+  template:
+    metadata:
+      labels:
+        app: contributor-app
+    spec:
+      containers:
+      - name: myapp
+        image: pradumnasaraf/contributor
+        envFrom:
+        - configMapRef:
+            name: api-configmap
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
