@@ -1,4 +1,4 @@
-name : Greetings
+name : Greets Contributors
 
 on:
   fork:
