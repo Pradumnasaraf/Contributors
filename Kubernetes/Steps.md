@@ -17,7 +17,7 @@ As soon you install on a cluster, it will create a LoadBalancer service on the c
 ```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
+helm install --namespace ingress-nginx --create-namespace nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
 ```
 
 2. Update the [Api.Ingress.yaml](./Api.Ingress.yaml) file with the domain name or the LoadBalancer URL to get the traffic routed to the service.
