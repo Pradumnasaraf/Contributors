@@ -21,7 +21,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-        
+
   db:
     container_name: go-mongodb
     image: mongo:7.0.0
