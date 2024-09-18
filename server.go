@@ -11,10 +11,11 @@ import (
 func main() {
 
 	router := gin.Default()
+	// Will bypass the middleware (Auth) for health check
+	router.GET("/health", handler.HealthCheckHandler())
 
 	router.Use(middleware.BasicAuth())
 	router.GET("/", handler.PlaygroundHandler())
-	router.GET("/health", handler.HealthCheckHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
 	log.Fatal(router.Run())
