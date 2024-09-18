@@ -43,6 +43,24 @@ spec:
           periodSeconds: 5
         ports:
         - containerPort: 8080
+        env:
+        - name: test
+          value: "test"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: mongouri
+        - name: BASIC_AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: basicauthuser
+        - name: BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: basicauthpass
         envFrom:
         - configMapRef:
             name: api-configmap
