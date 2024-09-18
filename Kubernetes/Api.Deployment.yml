@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contributor-app-deployment
+  namespace: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: contributor-app
+  template:
+    metadata:
+      labels:
+        app: contributor-app
+    spec:
+      containers:
+      - name: myapp
+        image: pradumnasaraf/contributors:latest
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5      
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: mongouri
+        - name: BASIC_AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: basicauthusername
+        - name: BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: basicauthpassword
+        envFrom:
+        - configMapRef:
+            name: api-configmap

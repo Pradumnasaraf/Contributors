@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+  namespace: api
+data:
+  PORT: "8080"
+  MONGO_DB: "opensource"
+  MONGO_COLLECTION: "contributors"
+  GIN_MODE: "release"
