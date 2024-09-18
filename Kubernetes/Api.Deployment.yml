@@ -18,11 +18,11 @@ spec:
         image: pradumnasaraf/contributors:latest
         resources:
           limits:
-            memory: "500Mi"
-            cpu: "500m"
+            memory: "100Mi"
+            cpu: "100m"
           requests:
-            memory: "500Mi"
-            cpu: "500m"
+            memory: "100Mi"
+            cpu: "100m"
         startupProbe:
           httpGet:
             path: /health
@@ -44,8 +44,6 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: test
-          value: "test"
         - name: MONGO_URI
           valueFrom:
             secretKeyRef:
@@ -55,12 +53,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: api-db-secret
-              key: basicauthuser
+              key: basicauthusername
         - name: BASIC_AUTH_PASSWORD
           valueFrom:
             secretKeyRef:
               name: api-db-secret
-              key: basicauthpass
+              key: basicauthpassword
         envFrom:
         - configMapRef:
             name: api-configmap
