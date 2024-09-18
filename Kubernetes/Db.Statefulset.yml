@@ -22,26 +22,24 @@ spec:
         startupProbe:
           exec:
             command:
-              - mongo
-              - --eval
-              - "db.adminCommand('ping')"
-          initialDelaySeconds: 1
+              - pgrep
+              - mongod
+          initialDelaySeconds: 15
           periodSeconds: 5
         readinessProbe:
             exec:
               command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: 1
+                - pgrep
+                - mongod
+            initialDelaySeconds: 15
             periodSeconds: 5             
         livenessProbe:
           exec:
             command:
-              - mongo
-              - --eval
-              - "db.adminCommand('ping')"
-          initialDelaySeconds: 1
+              - pgrep
+              - mongod
+
+          initialDelaySeconds: 15
           periodSeconds: 5        
         volumeMounts:
         - name: mongodb-persistent-storage
