@@ -16,9 +16,6 @@ spec:
       containers:
       - name: myapp
         image: pradumnasaraf/contributor
-        envFrom:
-        - configMapRef:
-            name: api-configmap
         resources:
           limits:
             memory: "500Mi"
@@ -26,5 +23,26 @@ spec:
           requests:
             memory: "500Mi"
             cpu: "500m"
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5      
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
         ports:
         - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: api-configmap
