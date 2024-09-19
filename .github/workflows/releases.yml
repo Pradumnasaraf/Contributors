@@ -18,7 +18,6 @@ jobs:
         with:
           github-token: ${{ secrets.PA_TOKEN }}
           output-file: "false"
-          skip-commit: "true"
           create-summary: 'true'
           version-file: './version.yaml'
 
