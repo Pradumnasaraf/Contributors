@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-statefulset
+  namespace: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: redis-services
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.4
+        ports:
+        - containerPort: 6379
+        startupProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 6379  
+          initialDelaySeconds: 15
+          periodSeconds: 5             
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 15
+          periodSeconds: 5        
+        volumeMounts:
+        - name: redis-persistent-storage
+          mountPath: /data
+          
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-persistent-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
