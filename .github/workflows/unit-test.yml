@@ -16,6 +16,8 @@ jobs:
       MONGO_COLLECTION: contributors
       BASIC_AUTH_USERNAME: user
       BASIC_AUTH_PASSWORD: pass
+      REDIS_URI: localhost:6379
+      REDIS_RATE_LIMIT: 100
 
     steps:
       - name: MongoDB
@@ -23,8 +25,14 @@ jobs:
         with:
           mongodb-version: '7.0'
           mongodb-port: 27017
+
+      - name: Redis
+        uses: supercharge/redis-github-action@1.7.0
+        with:
+          redis-version: '7.0'
+          redis-port: 6379
       
-      - name: Checkout Code
+      - name: Checkout Repo Code
         uses: actions/checkout@v4
 
       - name: Setup mongodb-tools

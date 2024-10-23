@@ -22,25 +22,19 @@ type MongoDB struct {
 	Client *mongo.Client
 }
 
-// NewMongoDB creates a new MongoDB client and returns it
+// creates a new MongoDB client and returns it
 func NewMongoDB() *MongoDB {
-	// Load .env file
 	config.Config()
 
-	// Create a context
 	Ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-
-	// Set client options
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URI"))
-
-	// Connect to MongoDB
 	client, err := mongo.Connect(Ctx, clientOptions)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Check the connection
 	err = client.Ping(Ctx, nil)
 	if err != nil {
 		log.Fatal(err)
