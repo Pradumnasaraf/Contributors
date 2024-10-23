@@ -13,7 +13,7 @@ import (
 func RateLimiter(clientIP string) error {
 	ctx := context.Background()
 	rdb := redis.NewClient(&redis.Options{
-		Addr: os.Getenv("REDIS_URL"),
+		Addr: os.Getenv("REDIS_URI"),
 	})
 
 	limiter := redis_rate.NewLimiter(rdb)
