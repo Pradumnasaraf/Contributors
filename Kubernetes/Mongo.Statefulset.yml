@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: monogodb-statefulset
-  namespace: db
+  namespace: mongo
 spec:
   selector:
     matchLabels:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:7.0
+        image: mongo:8.0
         ports:
         - containerPort: 27017
         startupProbe:

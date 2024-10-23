@@ -20,18 +20,24 @@ spec:
         ports:
         - containerPort: 6379
         startupProbe:
-          tcpSocket:
-            port: 6379
+          exec:
+            command:
+            - redis-cli
+            - ping
           initialDelaySeconds: 15
           periodSeconds: 5
         readinessProbe:
-          tcpSocket:
-            port: 6379  
+          exec:
+            command:
+            - redis-cli
+            - ping
           initialDelaySeconds: 15
           periodSeconds: 5             
         livenessProbe:
-          tcpSocket:
-            port: 6379
+          exec:
+            command:
+            - redis-cli
+            - ping
           initialDelaySeconds: 15
           periodSeconds: 5        
         volumeMounts:
