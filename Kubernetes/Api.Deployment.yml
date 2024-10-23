@@ -49,6 +49,11 @@ spec:
             secretKeyRef:
               name: api-db-secret
               key: mongouri
+        - name: REDIS_URI
+          valueFrom:
+            secretKeyRef:
+              name: api-db-secret
+              key: redisuri
         - name: BASIC_AUTH_USERNAME
           valueFrom:
             secretKeyRef:

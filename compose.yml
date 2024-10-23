@@ -10,7 +10,8 @@ services:
     env_file:
       - .env.example
     environment:
-      - MONGO_URI=mongodb://db:27017
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_URI=redis:6379
     networks:
       - go-network
     healthcheck:
@@ -19,14 +20,16 @@ services:
       timeout: 10s
       retries: 5
     depends_on:
-      db:
+      mongo:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
-  db:
+  mongo:
     container_name: go-mongodb
-    image: mongo:7.0.0
+    image: mongo:8.0.0
     volumes:  
-      - dbdata:/data/db
+      - mongodbdata:/data/db
     networks:
       - go-network
     healthcheck:
@@ -36,8 +39,22 @@ services:
       retries: 5
       start_period: 40s
 
+  redis:
+    container_name: go-redis
+    image: redis:7.4
+    volumes:
+      - redisdata:/data
+    networks:
+      - go-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 volumes:
-  dbdata:
+  mongodbdata:
+  redisdata:
 
 networks:
   go-network:

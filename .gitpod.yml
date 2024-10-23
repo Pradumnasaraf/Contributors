@@ -2,6 +2,9 @@ tasks:
   - name: Mongo DB
     command: |
       mkdir -p /workspace/data && mongod --dbpath /workspace/data
+
+  - name: Redis
+    command: redis-server
       
   - name: Go Server
     init: 

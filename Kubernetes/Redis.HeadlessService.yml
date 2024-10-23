@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb-service
-  namespace: db
+  name: redis-services
+  namespace: redis
 spec:
   clusterIP: None # Headless service
   selector:
-    app: mongodb
+    app: redis
   ports:
     - protocol: TCP
-      port: 27017
-      targetPort: 27017
+      port: 6379
+      targetPort: 6379
