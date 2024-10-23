@@ -1,6 +1,6 @@
 ## Contributors
 
-Contributors is a GraphQL API written in Go. It uses MongoDB as a database. It is a simple API to manage Open Source Contributors and their contributions.
+Contributors is a GraphQL API written in Go. It uses MongoDB as a database to store and Redis to cache and rate limit the requests. To deploy the project Kubernetes is used (manifests are available in the `Kubernetes` directory).
 
 ## Using and developing
 
@@ -29,7 +29,7 @@ The easiest way to run this project in cloud with use of [Gitpod](https://www.gi
 
 ### Docker Compose
 
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have alredy cloned the repository.
+Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have already cloned the repository.
 
 Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container.
 
