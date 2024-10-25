@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/Pradumnasaraf/Contributors/middleware"
@@ -13,10 +14,12 @@ func main() {
 	router := gin.Default()
 	// Will bypass the middleware (Auth) for health check
 	router.GET("/health", handler.HealthCheckHandler())
+	router.GET("/metrics", handler.PrometheusHandler())
 
 	router.Use(middleware.BasicAuth())
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
+	log.Printf("Server is running on http://localhost:%s", os.Getenv("PORT"))
 	log.Fatal(router.Run())
 }

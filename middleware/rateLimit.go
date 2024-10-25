@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"errors"
+	"log"
 	"os"
 	"strconv"
 
@@ -20,7 +21,7 @@ func RateLimiter(clientIP string) error {
 	limitInt, _ := strconv.Atoi(os.Getenv("REDIS_RATE_LIMIT"))
 	res, err := limiter.Allow(ctx, clientIP, redis_rate.PerHour(limitInt))
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to connect to redis instance or check the limit of the incoming request.")
 	}
 
 	if res.Remaining == 0 {
