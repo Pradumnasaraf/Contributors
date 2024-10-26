@@ -6,11 +6,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Pradumnasaraf/Contributors/graph"
+	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-
-	"github.com/Pradumnasaraf/Contributors/middleware"
 )
 
 // Graphql handler
@@ -19,7 +18,7 @@ func GraphqlHandler() gin.HandlerFunc {
 	// Resolver is in the resolver.go file
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 	return func(c *gin.Context) {
-		err := middleware.RateLimiter(c.ClientIP())
+		err := redis.RateLimiter(c.ClientIP())
 		if err != nil {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too Many Requests"})
 			return

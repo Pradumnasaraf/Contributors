@@ -8,7 +8,6 @@ import (
 	"github.com/Pradumnasaraf/Contributors/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
 )
 
 type metrics struct {
@@ -17,7 +16,6 @@ type metrics struct {
 
 func main() {
 	reg := prometheus.NewRegistry()
-	reg.MustRegister(collectors.NewGoCollector())
 	m := NewMetrics(reg)
 	m.mynumber.Set(35)
 
