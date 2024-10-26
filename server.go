@@ -12,15 +12,18 @@ import (
 
 type metrics struct {
 	mynumber prometheus.Gauge
+	info     *prometheus.GaugeVec
 }
 
 func main() {
 	reg := prometheus.NewRegistry()
 	m := NewMetrics(reg)
+
 	m.mynumber.Set(35)
+	m.info.With(prometheus.Labels{"version": "2.1.2"}).Set(1)
 
 	router := gin.Default()
-	
+
 	// Will bypass the middleware (Auth) for health check
 	router.GET("/health", handler.HealthCheckHandler())
 	router.GET("/metrics", handler.PrometheusHandler(reg))
@@ -35,13 +38,19 @@ func main() {
 }
 
 func NewMetrics(reg prometheus.Registerer) *metrics {
-	m := &metrics{
+	addMetrics := &metrics{
 		mynumber: prometheus.NewGauge(prometheus.GaugeOpts{
 			Namespace: "myapp",
 			Name:      "my_number",
 			Help:      "Number of My Number",
 		}),
+		info: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Namespace: "myapp",
+			Name:      "info",
+			Help:      "Info about app version",
+		},
+			[]string{"version"}),
 	}
-	reg.MustRegister(m.mynumber)
-	return m
+	reg.MustRegister(addMetrics.mynumber, addMetrics.info)
+	return addMetrics
 }
