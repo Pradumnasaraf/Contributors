@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Pradumnasaraf/Contributors/graph"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/Pradumnasaraf/Contributors/middleware"
@@ -43,8 +44,8 @@ func HealthCheckHandler() gin.HandlerFunc {
 	}
 }
 
-func PrometheusHandler() gin.HandlerFunc {
-	h := promhttp.Handler()
+func PrometheusHandler(reg *prometheus.Registry) gin.HandlerFunc {
+	h := promhttp.HandlerFor(reg, promhttp.HandlerOpts{})
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
