@@ -51,7 +51,7 @@ func HealthCheckHandler() gin.HandlerFunc {
 
 // Prometheus handler
 func PrometheusHandler() gin.HandlerFunc {
-	registry := prom.Registry
+	registry := prom.PrometheusRegistry
 	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)

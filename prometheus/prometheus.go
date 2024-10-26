@@ -9,11 +9,11 @@ type metrics struct {
 	HttpRequestDuration *prometheus.HistogramVec
 }
 
-var Registry = prometheus.NewRegistry()
-var myMetrics = newMetrics(Registry)
+var PrometheusRegistry = prometheus.NewRegistry()
+var prometheusMetrics = initializeMetrics(PrometheusRegistry)
 
-func newMetrics(reg prometheus.Registerer) *metrics {
-	defineMetrics := &metrics{
+func initializeMetrics(reg prometheus.Registerer) *metrics {
+	requestMetrics := &metrics{
 		HttpRequestTotal: prometheus.NewCounterVec(prometheus.CounterOpts{
 			Name: "http_request_total",
 			Help: "Total number of HTTP requests to the API.",
@@ -27,15 +27,15 @@ func newMetrics(reg prometheus.Registerer) *metrics {
 			[]string{"path"}),
 	}
 
-	reg.MustRegister(defineMetrics.HttpRequestDuration, defineMetrics.HttpRequestTotal)
-	return defineMetrics
+	reg.MustRegister(requestMetrics.HttpRequestDuration, requestMetrics.HttpRequestTotal)
+	return requestMetrics
 }
 
 func HttpRequestTotal() {
 
-	myMetrics.HttpRequestTotal.WithLabelValues("/query").Inc()
+	prometheusMetrics.HttpRequestTotal.WithLabelValues("/query").Inc()
 }
 
 func HttpRequestDuration() *metrics {
-	return myMetrics
+	return prometheusMetrics
 }
