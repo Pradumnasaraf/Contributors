@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"math/rand/v2"
 	"os"
+	"time"
 
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/Pradumnasaraf/Contributors/middleware"
@@ -17,10 +19,15 @@ type metrics struct {
 
 func main() {
 	reg := prometheus.NewRegistry()
-	m := NewMetrics(reg)
+	metrics := NewMetrics(reg)
 
-	m.mynumber.Set(35)
-	m.info.With(prometheus.Labels{"version": "2.1.2"}).Set(1)
+	go func() {
+		for {
+			metrics.mynumber.Set(float64(rand.IntN(100)))
+			time.Sleep(5 * time.Second)
+		}
+	}()
+	metrics.info.With(prometheus.Labels{"version": "2.1.2"}).Set(1)
 
 	router := gin.Default()
 

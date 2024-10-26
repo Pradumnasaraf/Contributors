@@ -24,6 +24,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    develop:
+      watch:
+        - path: .
+          action: rebuild
 
   mongo:
     container_name: go-mongodb
@@ -52,9 +56,35 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.55.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - go-network
+  
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.3.0
+    volumes:
+      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - grafana-data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - go-network
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+
 volumes:
   mongodbdata:
   redisdata:
+  grafana-data:
 
 networks:
   go-network:
