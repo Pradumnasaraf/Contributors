@@ -9,7 +9,6 @@ import (
 	prom "github.com/Pradumnasaraf/Contributors/prometheus"
 	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -19,6 +18,7 @@ func GraphqlHandler() gin.HandlerFunc {
 	// Resolver is in the resolver.go file
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 	return func(c *gin.Context) {
+		prom.NumberOfRequests()
 		err := redis.RateLimiter(c.ClientIP())
 		if err != nil {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too Many Requests"})
@@ -45,8 +45,8 @@ func HealthCheckHandler() gin.HandlerFunc {
 }
 
 func PrometheusHandler() gin.HandlerFunc {
-	registry := prometheus.NewRegistry()
-	prom.WriteMetrics(registry)
+	registry := prom.Registry
+	prom.WriteMetrics()
 	h := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
