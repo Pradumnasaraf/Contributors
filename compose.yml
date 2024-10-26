@@ -48,6 +48,8 @@ services:
     image: redis:7.4
     volumes:
       - redisdata:/data
+    ports:
+      - 6379:6379 
     networks:
       - go-network
     healthcheck:
@@ -56,7 +58,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-
+      
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v2.55.0

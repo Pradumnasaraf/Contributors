@@ -5,43 +5,37 @@ import (
 )
 
 type metrics struct {
-	noOfRequests prometheus.Gauge
-	info         *prometheus.GaugeVec
-	counter      *prometheus.CounterVec
+	HttpRequestTotal    *prometheus.CounterVec
+	HttpRequestDuration *prometheus.HistogramVec
 }
 
 var Registry = prometheus.NewRegistry()
 var myMetrics = newMetrics(Registry)
 
-func WriteMetrics() {
-
-	myMetrics.info.With(prometheus.Labels{"version": "2.0.3"}).Set(6)
-}
-
 func newMetrics(reg prometheus.Registerer) *metrics {
-	addMetrics := &metrics{
-		noOfRequests: prometheus.NewGauge(prometheus.GaugeOpts{
-			Name: "no_of_requests",
-			Help: "Total number of request to the API server",
-		}),
-		info: prometheus.NewGaugeVec(prometheus.GaugeOpts{
-			Name: "info",
-			Help: "Info about app version",
+	defineMetrics := &metrics{
+		HttpRequestTotal: prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "http_request_total",
+			Help: "Total number of HTTP requests to the API.",
 		},
-			[]string{"version"}),
-		counter: prometheus.NewCounterVec(prometheus.CounterOpts{
-			Name: "my_counter",
-			Help: "count",
+			[]string{"path"}),
+		HttpRequestDuration: prometheus.NewHistogramVec(prometheus.HistogramOpts{
+			Name:    "http_request_duration_seconds",
+			Help:    "Duration of HTTP requests",
+			Buckets: []float64{0.01, 0.015, 0.02, 0.025, 0.03},
 		},
-			[]string{"type"}),
+			[]string{"path"}),
 	}
 
-	reg.MustRegister(addMetrics.noOfRequests, addMetrics.info, addMetrics.counter)
-	return addMetrics
+	reg.MustRegister(defineMetrics.HttpRequestDuration, defineMetrics.HttpRequestTotal)
+	return defineMetrics
 }
 
-func NumberOfRequests() {
+func HttpRequestTotal() {
 
-	myMetrics.noOfRequests.Inc()
+	myMetrics.HttpRequestTotal.WithLabelValues("/query").Inc()
+}
 
+func HttpRequestDuration() *metrics {
+	return myMetrics
 }
