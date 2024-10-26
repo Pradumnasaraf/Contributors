@@ -20,14 +20,15 @@ func main() {
 	m.mynumber.Set(35)
 
 	router := gin.Default()
+	
 	// Will bypass the middleware (Auth) for health check
 	router.GET("/health", handler.HealthCheckHandler())
+	router.GET("/metrics", handler.PrometheusHandler(reg))
 
 	router.Use(middleware.BasicAuth())
+
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
-
-	router.GET("/metrics", handler.PrometheusHandler(reg))
 
 	log.Printf("Server is running on http://localhost:%s", os.Getenv("PORT"))
 	log.Fatal(router.Run())
