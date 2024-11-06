@@ -1,54 +1,55 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis-statefulset
-  namespace: redis
+  name: monogodb-statefulset
+  namespace: mongo
 spec:
   selector:
     matchLabels:
-      app: redis
-  serviceName: redis-services
+      app: mongodb
+  serviceName: mongodb-services
   replicas: 3
   template:
     metadata:
       labels:
-        app: redis
+        app: mongodb
     spec:
       containers:
-      - name: redis
-        image: redis:7.4
+      - name: mongodb
+        image: mongo:8.0
         ports:
-        - containerPort: 6379
+        - containerPort: 27017
         startupProbe:
           exec:
             command:
-            - redis-cli
-            - ping
+              - pgrep
+              - mongod
           initialDelaySeconds: 15
           periodSeconds: 5
         readinessProbe:
-          exec:
-            command:
-            - redis-cli
-            - ping
-          initialDelaySeconds: 15
-          periodSeconds: 5             
+            exec:
+              command:
+                - pgrep
+                - mongod
+            initialDelaySeconds: 15
+            periodSeconds: 5             
         livenessProbe:
           exec:
             command:
-            - redis-cli
-            - ping
+              - pgrep
+              - mongod
+
           initialDelaySeconds: 15
           periodSeconds: 5        
         volumeMounts:
-        - name: redis-persistent-storage
-          mountPath: /data
+        - name: mongodb-persistent-storage
+          mountPath: /data/db
           
   volumeClaimTemplates:
   - metadata:
-      name: redis-persistent-storage
+      name: mongodb-persistent-storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 1Gi
+          storage: 500Mi
