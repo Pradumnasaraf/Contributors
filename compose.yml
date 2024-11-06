@@ -73,7 +73,7 @@ services:
     container_name: grafana
     image: grafana/grafana:11.3.0
     volumes:
-      - ./Docker/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./Docker/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
       - grafana-data:/var/lib/grafana
     ports:
       - 3000:3000
