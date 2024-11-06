@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: pradumnasaraf/contributors:latest
+        image: pradumnasaraf/cc:v3
         resources:
           limits:
             memory: "100Mi"

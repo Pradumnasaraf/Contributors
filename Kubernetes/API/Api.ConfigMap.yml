@@ -8,4 +8,4 @@ data:
   MONGO_DB: "opensource"
   MONGO_COLLECTION: "contributors"
   GIN_MODE: "release"
-  REDIS_RATE_LIMIT: "100"
+  REDIS_RATE_LIMIT: "25"

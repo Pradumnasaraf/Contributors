@@ -63,7 +63,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:v2.55.0
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./Docker/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
     networks:
@@ -73,7 +73,7 @@ services:
     container_name: grafana
     image: grafana/grafana:11.3.0
     volumes:
-      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./Docker/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
       - grafana-data:/var/lib/grafana
     ports:
       - 3000:3000
