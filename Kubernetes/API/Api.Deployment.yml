@@ -18,11 +18,11 @@ spec:
         image: pradumnasaraf/contributors:latest
         resources:
           limits:
-            memory: "100Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "500m"
           requests:
-            memory: "100Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "500m"
         startupProbe:
           httpGet:
             path: /health
