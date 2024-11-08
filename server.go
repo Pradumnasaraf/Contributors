@@ -17,10 +17,11 @@ func main() {
 	// Will bypass the middleware (Auth) for health check
 	router.GET("/health", handler.HealthCheckHandler())
 
-	router.Use(prometheus.PrometheusTrackMetrics())
+	router.Use(prometheus.RequestMetricsMiddleware())
 	router.GET("/metrics", handler.PrometheusHandler())
 
 	router.Use(middleware.BasicAuth())
+
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
 

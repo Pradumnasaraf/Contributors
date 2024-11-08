@@ -35,7 +35,7 @@ func initializeMetrics(reg prometheus.Registerer) *metrics {
 	return requestMetrics
 }
 
-func PrometheusTrackMetrics() gin.HandlerFunc {
+func RequestMetricsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Request.URL.Path
 		c.Next()
