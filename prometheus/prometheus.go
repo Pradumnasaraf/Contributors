@@ -14,6 +14,7 @@ type metrics struct {
 
 // PrometheusRegistry is Capitalize to use in PrometheusHandler() handler in handlers.go
 var PrometheusRegistry = prometheus.NewRegistry()
+
 var prometheusMetrics = initializeMetrics(PrometheusRegistry)
 
 func initializeMetrics(reg prometheus.Registerer) *metrics {
@@ -39,10 +40,9 @@ func PrometheusTrackMetrics() gin.HandlerFunc {
 		path := c.Request.URL.Path
 		c.Next()
 		status := c.Writer.Status()
-		if status <= 400 {
-			prometheusMetrics.HttpRequestTotal.WithLabelValues(path, http.StatusText(status)).Inc()
-			return
+		prometheusMetrics.HttpRequestTotal.WithLabelValues(path, http.StatusText(status)).Inc()
+		if status >= 400 {
+			prometheusMetrics.HttpRequestErrorTotal.WithLabelValues(path, http.StatusText(status)).Inc()
 		}
-		prometheusMetrics.HttpRequestErrorTotal.WithLabelValues(path, http.StatusText(status)).Inc()
 	}
 }
