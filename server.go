@@ -6,6 +6,7 @@ import (
 
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/Pradumnasaraf/Contributors/middleware"
+	"github.com/Pradumnasaraf/Contributors/prometheus"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,10 +16,11 @@ func main() {
 
 	// Will bypass the middleware (Auth) for health check
 	router.GET("/health", handler.HealthCheckHandler())
+
+	router.Use(prometheus.PrometheusTrackMetrics())
 	router.GET("/metrics", handler.PrometheusHandler())
 
 	router.Use(middleware.BasicAuth())
-
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
