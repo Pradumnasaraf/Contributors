@@ -1,7 +1,7 @@
 package prometheus
 
 import (
-	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
@@ -40,9 +40,10 @@ func RequestMetricsMiddleware() gin.HandlerFunc {
 		path := c.Request.URL.Path
 		c.Next()
 		status := c.Writer.Status()
-		prometheusMetrics.HttpRequestTotal.WithLabelValues(path, http.StatusText(status)).Inc()
-		if status >= 400 {
-			prometheusMetrics.HttpRequestErrorTotal.WithLabelValues(path, http.StatusText(status)).Inc()
+		if status <= 400 {
+			prometheusMetrics.HttpRequestTotal.WithLabelValues(path, strconv.Itoa(status)).Inc()
+			return
 		}
+		prometheusMetrics.HttpRequestErrorTotal.WithLabelValues(path, strconv.Itoa(status)).Inc()
 	}
 }
