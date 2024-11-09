@@ -101,8 +101,8 @@
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 10,
+        "h": 11,
+        "w": 11,
         "x": 0,
         "y": 0
       },
@@ -172,7 +172,6 @@
         }
       ],
       "title": "Total Requests",
-      "transparent": true,
       "type": "bargauge"
     }
   ],
@@ -191,6 +190,6 @@
   "timezone": "browser",
   "title": "GO API Dashboard",
   "uid": "ce3c878flf9q8f",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }
