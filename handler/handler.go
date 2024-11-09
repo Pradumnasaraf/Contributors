@@ -16,7 +16,6 @@ import (
 func GraphqlHandler() gin.HandlerFunc {
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 	return func(c *gin.Context) {
-
 		err := redis.RateLimiter(c.ClientIP())
 		if err != nil {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too Many Requests"})
