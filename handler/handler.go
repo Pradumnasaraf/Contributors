@@ -9,7 +9,6 @@ import (
 	prom "github.com/Pradumnasaraf/Contributors/prometheus"
 	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -17,12 +16,6 @@ import (
 func GraphqlHandler() gin.HandlerFunc {
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 	return func(c *gin.Context) {
-
-		prom.HttpRequestTotal()
-		metrics := prom.HttpRequestDuration()
-		timer := prometheus.NewTimer(metrics.HttpRequestDuration.WithLabelValues("/query"))
-		defer timer.ObserveDuration()
-
 		err := redis.RateLimiter(c.ClientIP())
 		if err != nil {
 			c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too Many Requests"})

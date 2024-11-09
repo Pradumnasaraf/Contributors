@@ -18,29 +18,29 @@ spec:
         image: pradumnasaraf/contributors:latest
         resources:
           limits:
-            memory: "100Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "500m"
           requests:
-            memory: "100Mi"
-            cpu: "100m"
+            memory: "500Mi"
+            cpu: "500m"
         startupProbe:
           httpGet:
             path: /health
             port: 8080
           initialDelaySeconds: 15
-          periodSeconds: 5      
+          periodSeconds: 60   
         readinessProbe:
           httpGet:
             path: /health
             port: 8080
           initialDelaySeconds: 15
-          periodSeconds: 5
+          periodSeconds: 60
         livenessProbe:
           httpGet:
             path: /health
             port: 8080
           initialDelaySeconds: 15
-          periodSeconds: 5
+          periodSeconds: 60
         ports:
         - containerPort: 8080
         env:
