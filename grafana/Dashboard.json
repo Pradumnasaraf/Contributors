@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PEF57EC2B9BFC4715"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Total number of incoming request to different routes",
       "fieldConfig": {
@@ -40,14 +40,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              },
-              {
-                "color": "#EAB839",
-                "value": 90
               }
             ]
           }
@@ -86,13 +78,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Total Number Of Requests"
+              "options": "Total No. Of Requests"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "super-light-blue",
+                  "fixedColor": "light-blue",
                   "mode": "shades"
                 }
               }
@@ -143,7 +135,7 @@
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "Total Number Of Requests",
+          "legendFormat": "Total No. Of Requests",
           "range": true,
           "refId": "Total Number of Requests"
         },
@@ -177,7 +169,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PEF57EC2B9BFC4715"
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -185,7 +177,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -193,7 +185,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 8,
+            "fillOpacity": 19,
             "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
@@ -202,7 +194,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "smooth",
-            "lineWidth": 1,
+            "lineWidth": 2,
             "pointSize": 1,
             "scaleDistribution": {
               "type": "linear"
@@ -245,7 +237,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -282,6 +274,6 @@
   "timezone": "browser",
   "title": "GO API Dashboard",
   "uid": "ce3c878flf9q8f",
-  "version": 6,
+  "version": 8,
   "weekStart": ""
 }
