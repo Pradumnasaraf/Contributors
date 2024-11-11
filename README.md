@@ -1,172 +1,76 @@
 ## Contributors
 
-Contributors is a GraphQL API written in Go. It uses MongoDB as a database to store and Redis to cache and rate limit the requests. To deploy the project Kubernetes is used (manifests are available in the `Kubernetes` directory).
+**Contributors** is a GraphQL API written in Go. It stores data in MongoDB and uses Redis to cache and rate-limit requests. For monitoring, it integrates with Prometheus (Custom Metrics) and Grafana. The purpose of this API is to store open-source contributors and their contributions to various projects.
 
-## Using and developing
+## Using and Developing
 
 ### Local Development
 
-Make sure you have [Go](https://golang.org/) and [MongoDB](https://www.mongodb.com/) installed. And you have alredy cloned the repository.
+#### Prerequisites
 
-First, copy the `.env.example` file to `.env` and change the values to your own. You can use below bash command to do that.
+To run the project locally, ensure you have the following installed:
 
-```bash
-cp .env.example .env
-```
+- [Golang](https://golang.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Redis](https://redis.io/)
+- [Prometheus and Grafana](https://prometheus.io/docs/visualization/grafana/) (Only if you need monitoring)
 
-Then, run the following commands to start the server.
+> **Note:**  
+> Redis, Prometheus, and Grafana can be run using Docker. It's not feasible to run some services in Docker and others locally. For consistency, it is recommended to use Docker Compose to run all services.
 
-```bash
-go mod download
-go run main.go
-```
+#### Steps for Local Setup
 
-### Gitpod
+1. Copy the `.env.example` file to `.env` and update the values with your own configuration. Use the following bash command:
+   ```bash
+   cp .env.example .env
+   ```
 
-The easiest way to run this project in cloud with use of [Gitpod](https://www.gitpod.io/). Just click on the button below to start the project in Gitpod.
+2. Install dependencies and start the server:
+   ```bash
+   go mod download
+   go run main.go
+   ```
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/Pradumnasaraf/Contributors)
+3. Access the API at `http://localhost:8080/`.
 
 ### Docker Compose
 
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have already cloned the repository.
+#### Prerequisites
 
-Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container.
+Make sure you have the following installed:
 
-```bash
-docker compose up
-```
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/) (Docker Compose is included with Docker Desktop)
+
+#### Steps for Docker Compose Setup
+
+1. Run the following command to start the services, including MongoDB, the Go API, Prometheus, and Grafana:
+   ```bash
+   docker compose up
+   ```
+
+2. If you're using the latest version of Docker Compose, you can leverage the Compose Watch feature. This will automatically rebuild the application when code changes are made:
+   ```bash
+   docker compose up --watch
+   docker compose up --build --watch
+   ```
+
+3. You can now access the following:
+   - API: `http://localhost:8080/`
+   - Prometheus: `http://localhost:9090/`
+   - Grafana: `http://localhost:3000/`
+
 
 ## Using the API
 
-You can use the GraphQL Playground to interact with the API. It will be available at `http://localhost:8080/` if you are running the API locally.
+You can interact with the API using the **GraphQL Playground**, which will be available at `http://localhost:8080/` when running locally. Alternatively, you can interact with the API via the `/query` endpoint.
 
-### Queries
-
-#### Add a new contributor
-
-The `userId` for a contributor is the `U` + `githubUsername`. For example, if the `githubUsername` is `example`, then the `userId` will be `Uexample`. This is done to make sure that the `userId` is unique. `contributions` is optional in the input.
-
-```graphql
-mutation {
-  addAContributor(
-    input: {
-      githubUsername: "example"
-      name: "Pradumna Saraf"
-      email: "example@example.com"
-      contributions: {
-        projectName: "example"
-        type: "code"
-        date: "2021-09-01"
-      }
-    }
-  ) {
-    userId
-    githubUsername
-    name
-    email
-    contributions {
-      contributionId
-      projectName
-      type
-      date
-    }
-  }
-}
-```
-
-#### Get all contributors
-
-```graphql
-query {
-  getAllContributors {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Get a contributor by userId
-
-```graphql
-query {
-  getAContributor(userId: "Uexample") {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Update a contributor by userId
-
-In update we don't update the `userId` if `githubUsername` is changed. This is done to make sure that the `userId` is always remain same.
-
-```graphql
-mutation {
-  updateAContributor(
-    userId: "Uexample"
-    input: {
-      name: "example"
-      email: "example@example.com"
-      githubUsername: "example"
-    }
-  ) {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Delete a contributor by userId
-
-```graphql
-mutation {
-  deleteAContributor(userId: "Uexample") {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Add a new contribution
-
-The `contributionId` for a contribution is the `C` + `repositoryName`. For example, if the `repositoryName` is `example`, then the `contributionId` will be `Cexample`. This is done to make sure that the `contributionId` is unique.
-
-```graphql
-mutation {
-  addAContribution(
-    userId: "Uexample"
-    input: { projectName: "example", type: "code", date: "2021-09-01" }
-  ) {
-    contributionId
-  }
-}
-```
-
-#### Delete a contribution
-
-```graphql
-mutation {
-  deleteAContribution(contributionId: "Cexample") {
-    contributionId
-  }
-}
-```
-
-####
+All **Query** and **Mutation** operations are defined in the [operations.md](operations.md) file.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) for details.
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Security
 
-If you discover a security vulnerability within this project, please check the [security policy](SECURITY.md) for more information.
+If you discover a security vulnerability within this project, please refer to the [security policy](SECURITY.md) for more information.
