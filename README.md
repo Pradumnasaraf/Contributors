@@ -2,7 +2,7 @@
 
 **Contributors** is a GraphQL API written in Go. It stores data in MongoDB and uses Redis to cache and rate-limit requests. For monitoring, it integrates with Prometheus (Custom Metrics) and Grafana. The purpose of this API is to store open-source contributors and their contributions to various projects.
 
-https://github.com/user-attachments/assets/4d889b62-9396-4828-ab8a-d5b6ba455423
+https://github.com/user-attachments/assets/49bb79f6-5d63-4ab5-b7b3-92b9bcb783db
 
 ## Using and Developing
 
