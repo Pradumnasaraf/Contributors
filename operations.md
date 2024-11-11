@@ -1,6 +1,8 @@
-Purpose of this file is to provide the information about the operations that can be performed with the GraphQL API.
+This document contains the operations that can be performed on the GraphQL API.
 
 ## Query
+
+Query operations are used to fetch data from the server.
 
 ### Get a contributor
 
@@ -68,6 +70,8 @@ query getAllContributors {
 ```
 
 ### Mutation
+
+Mutation operations are used to modify data on the server.
 
 ### Add a contributor - without contributions
 

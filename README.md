@@ -2,6 +2,8 @@
 
 **Contributors** is a GraphQL API written in Go. It stores data in MongoDB and uses Redis to cache and rate-limit requests. For monitoring, it integrates with Prometheus (Custom Metrics) and Grafana. The purpose of this API is to store open-source contributors and their contributions to various projects.
 
+https://github.com/user-attachments/assets/4d889b62-9396-4828-ab8a-d5b6ba455423
+
 ## Using and Developing
 
 ### Local Development
@@ -60,12 +62,13 @@ Make sure you have the following installed:
    - Prometheus: `http://localhost:9090/`
    - Grafana: `http://localhost:3000/`
 
-
 ## Using the API
 
 You can interact with the API using the **GraphQL Playground**, which will be available at `http://localhost:8080/` when running locally. Alternatively, you can interact with the API via the `/query` endpoint.
 
 All **Query** and **Mutation** operations are defined in the [operations.md](operations.md) file.
+
+If you are using Grafana, you can import the pre-built dashboard from the `grafana` directory.
 
 ## License
 
