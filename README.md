@@ -1,12 +1,25 @@
 ## Contributors
 
-Contributors is a GraphQL API written in Go. It uses MongoDB as a database to store and Redis to cache and rate limit the requests. To deploy the project Kubernetes is used (manifests are available in the `Kubernetes` directory).
+Contributors is a GraphQL API written in Go. It stores data in MongoDB and uses Redis to cache and rate-limit requests. For monitoring, it uses Prometheus (Custom Metrics) and Grafana. The purpose of this API is store open source contributors and their contributions to different projects.
+
+
+
+
 
 ## Using and developing
 
 ### Local Development
 
-Make sure you have [Go](https://golang.org/) and [MongoDB](https://www.mongodb.com/) installed. And you have alredy cloned the repository.
+#### Prerequisites
+
+- [Golang](https://golang.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Redis](https://redis.io/)
+- [Prometheus and Grafana](https://prometheus.io/docs/visualization/grafana/) - Only if you need monitoring.
+
+> [Note]
+> Redis, Prometheus and Grafana can we run using Docker. It's not feasible to run half of services in Docker and half of them locally. So, it's better use Docker Compose to run all the services.
+
 
 First, copy the `.env.example` file to `.env` and change the values to your own. You can use below bash command to do that.
 
@@ -21,147 +34,35 @@ go mod download
 go run main.go
 ```
 
-### Gitpod
-
-The easiest way to run this project in cloud with use of [Gitpod](https://www.gitpod.io/). Just click on the button below to start the project in Gitpod.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/Pradumnasaraf/Contributors)
+Now, you can access the API at `http://localhost:8080/`.
 
 ### Docker Compose
 
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed. And you have already cloned the repository.
+#### Prerequisites
 
-Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container.
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+If you are using Docker for Desktop, Compose comes with it. 
+
+Then, run the following commands to start the server. It will step up a MongoDB container and a Go API container. Monitoring is also configured with Prometheus and Grafana.
 
 ```bash
 docker compose up
 ```
 
+If you using lases version of Docker Compose, you can use Compose Watch feature, it will automatically rebuild the application when you make changes to the code.
+
+```bash
+docker compose up --watch
+docker compose up --build --watch
+```
+
+Now, you can access the API at `http://localhost:8080/`. Prometheus is available at `http://localhost:9090/` and Grafana is available at `http://localhost:3000/`.
+
 ## Using the API
 
-You can use the GraphQL Playground to interact with the API. It will be available at `http://localhost:8080/` if you are running the API locally.
-
-### Queries
-
-#### Add a new contributor
-
-The `userId` for a contributor is the `U` + `githubUsername`. For example, if the `githubUsername` is `example`, then the `userId` will be `Uexample`. This is done to make sure that the `userId` is unique. `contributions` is optional in the input.
-
-```graphql
-mutation {
-  addAContributor(
-    input: {
-      githubUsername: "example"
-      name: "Pradumna Saraf"
-      email: "example@example.com"
-      contributions: {
-        projectName: "example"
-        type: "code"
-        date: "2021-09-01"
-      }
-    }
-  ) {
-    userId
-    githubUsername
-    name
-    email
-    contributions {
-      contributionId
-      projectName
-      type
-      date
-    }
-  }
-}
-```
-
-#### Get all contributors
-
-```graphql
-query {
-  getAllContributors {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Get a contributor by userId
-
-```graphql
-query {
-  getAContributor(userId: "Uexample") {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Update a contributor by userId
-
-In update we don't update the `userId` if `githubUsername` is changed. This is done to make sure that the `userId` is always remain same.
-
-```graphql
-mutation {
-  updateAContributor(
-    userId: "Uexample"
-    input: {
-      name: "example"
-      email: "example@example.com"
-      githubUsername: "example"
-    }
-  ) {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Delete a contributor by userId
-
-```graphql
-mutation {
-  deleteAContributor(userId: "Uexample") {
-    userId
-    githubUsername
-    name
-    email
-  }
-}
-```
-
-#### Add a new contribution
-
-The `contributionId` for a contribution is the `C` + `repositoryName`. For example, if the `repositoryName` is `example`, then the `contributionId` will be `Cexample`. This is done to make sure that the `contributionId` is unique.
-
-```graphql
-mutation {
-  addAContribution(
-    userId: "Uexample"
-    input: { projectName: "example", type: "code", date: "2021-09-01" }
-  ) {
-    contributionId
-  }
-}
-```
-
-#### Delete a contribution
-
-```graphql
-mutation {
-  deleteAContribution(contributionId: "Cexample") {
-    contributionId
-  }
-}
-```
-
-####
+You can use the GraphQL Playground to interact with the API. It will be available at `http://localhost:8080/` if you are running the API locally. Otherwise you can use `/query` endpoint to interact with the API. All the **Query** and **Mutation** operations are defined in the [operation.md](operation.md) file.
 
 ## License
 
