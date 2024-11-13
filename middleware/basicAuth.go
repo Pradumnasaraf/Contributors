@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func BasicAuth() gin.HandlerFunc {
+func BasicAuthMiddleware() gin.HandlerFunc {
 
 	username := os.Getenv("BASIC_AUTH_USERNAME")
 	password := os.Getenv("BASIC_AUTH_PASSWORD")

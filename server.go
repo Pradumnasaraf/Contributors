@@ -20,7 +20,8 @@ func main() {
 	router.GET("/health", handler.HealthCheckHandler())
 	router.GET("/metrics", handler.PrometheusHandler())
 
-	router.Use(middleware.BasicAuth())
+	router.Use(middleware.BasicAuthMiddleware())
+	router.Use(middleware.RedisRateLimiterMiddleware())
 	router.GET("/", handler.PlaygroundHandler())
 	router.POST("/query", handler.GraphqlHandler())
 
