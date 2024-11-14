@@ -10,12 +10,24 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/Pradumnasaraf/Contributors/config"
+	"github.com/Pradumnasaraf/Contributors/graph"
 	"github.com/Pradumnasaraf/Contributors/handler"
+	"github.com/Pradumnasaraf/Contributors/mongo"
+	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/magiconair/properties/assert"
 )
 
 func TestAddAContribution(t *testing.T) {
+	// Config setup
+	config.Config()
+
+	// Database connection
+	redis.RedisInit()
+	mongoClient := mongo.MongoInit()
+	graph.GetMongoClient(mongoClient)
+	defer redis.RedisClose()
 
 	r := gin.Default()
 	r.POST("/graphql", handler.GraphqlHandler())

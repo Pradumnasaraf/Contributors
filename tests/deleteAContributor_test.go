@@ -42,7 +42,7 @@ func TestDeleteAContributor(t *testing.T) {
 				return req
 			}(),
 			ExpectedStatus: http.StatusOK,
-			ExpectedBody:   `{"errors":[{"message":"error while deleting the document. Document with the given ID may not exist","path":["deleteAContributor"]}],"data":null}`,
+			ExpectedBody:   `{"errors":[{"message":"document not found. Document with the given ID may not exist","path":["deleteAContributor"]}],"data":null}`,
 		},
 	}
 

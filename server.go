@@ -8,7 +8,7 @@ import (
 	"github.com/Pradumnasaraf/Contributors/graph"
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/Pradumnasaraf/Contributors/middleware"
-	database "github.com/Pradumnasaraf/Contributors/mongo"
+	"github.com/Pradumnasaraf/Contributors/mongo"
 	"github.com/Pradumnasaraf/Contributors/prometheus"
 	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func main() {
 
 	// Database connection
 	redis.RedisInit()
-	mongoClient := database.MongoInit()
+	mongoClient := mongo.MongoInit()
 	graph.GetMongoClient(mongoClient)
 	defer redis.RedisClose()
 

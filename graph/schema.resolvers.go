@@ -12,10 +12,10 @@ import (
 	"github.com/Pradumnasaraf/Contributors/mongo"
 )
 
-var mongoClient *database.MongoDB
+var mongoClient *mongo.MongoDB
 
 // GetMongoClient is a function that sets the MongoDB client.
-func GetMongoClient(client *database.MongoDB) {
+func GetMongoClient(client *mongo.MongoDB) {
 	mongoClient = client
 }
 
