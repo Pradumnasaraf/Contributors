@@ -7,25 +7,20 @@ import (
 	"os"
 	"time"
 
-	"github.com/Pradumnasaraf/Contributors/config"
 	"github.com/Pradumnasaraf/Contributors/graph/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Collection *mongo.Collection
-var Ctx context.Context
-
-// MongoDB is a struct that holds the MongoDB client
+// MongoDB struct holds the client and collection
 type MongoDB struct {
-	Client *mongo.Client
+	Client     *mongo.Client
+	Collection *mongo.Collection
 }
 
-// creates a new MongoDB client and returns it
-func NewMongoDB() *MongoDB {
-	config.Config()
-
+// MongoInit creates a new MongoDB client and returns it
+func MongoInit() *MongoDB {
 	Ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URI"))
@@ -41,16 +36,19 @@ func NewMongoDB() *MongoDB {
 	}
 
 	log.Println("Connected to MongoDB!")
-	Collection = client.Database(os.Getenv("MONGO_DB")).Collection(os.Getenv("MONGO_COLLECTION"))
+	collection := client.Database(os.Getenv("MONGO_DB")).Collection(os.Getenv("MONGO_COLLECTION"))
 
 	return &MongoDB{
-		Client: client,
+		Client:     client,
+		Collection: collection,
 	}
 }
 
-// ADD a new contributor
+// Add a new contributor
 func (db *MongoDB) Add(contributor *model.Contributor) error {
-	_, err := Collection.InsertOne(Ctx, contributor)
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_, err := db.Collection.InsertOne(Ctx, contributor)
 
 	if err != nil {
 		return errors.New("error while adding a new document. Document with the given ID may already exist")
@@ -59,9 +57,11 @@ func (db *MongoDB) Add(contributor *model.Contributor) error {
 	return nil
 }
 
-// GET all contributors
+// GetAll contributors
 func (db *MongoDB) GetAll() ([]*model.Contributor, error) {
-	cursor, err := Collection.Find(context.Background(), bson.D{{}})
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	cursor, err := db.Collection.Find(Ctx, bson.D{{}})
 	if err != nil {
 		return nil, errors.New("error while getting the documents")
 	}
@@ -69,38 +69,47 @@ func (db *MongoDB) GetAll() ([]*model.Contributor, error) {
 	defer cursor.Close(Ctx)
 	var result []*model.Contributor
 
-	for cursor.Next(context.Background()) {
-		var contributor *model.Contributor
-		err := cursor.Decode(&contributor)
-		if err != nil {
+	for cursor.Next(Ctx) {
+		var contributor model.Contributor
+		if err := cursor.Decode(&contributor); err != nil {
 			return nil, errors.New("error while decoding the document")
 		}
-
-		result = append(result, contributor)
+		result = append(result, &contributor)
 	}
 
 	return result, nil
 }
 
-// GET a contributor by ID
+// GetByID retrieves a contributor by ID
 func (db *MongoDB) GetByID(userId string) (*model.Contributor, error) {
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	filter := bson.M{"_id": userId}
-	var contributor *model.Contributor
-	err := Collection.FindOne(Ctx, filter).Decode(&contributor)
+	var contributor model.Contributor
+	err := db.Collection.FindOne(Ctx, filter).Decode(&contributor)
 
 	if err != nil {
 		return nil, errors.New("error while getting the document. Document with the given ID may not exist")
 	}
 
-	return contributor, nil
+	return &contributor, nil
 }
 
-// UPDATE a contributor by ID
+// UpdateByID updates a contributor by ID
 func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	filter := bson.M{"_id": contributor.UserID}
-	update := bson.M{"$set": bson.M{"githubusername": contributor.GithubUsername, "name": contributor.Name, "email": contributor.Email}}
-	result, _ := Collection.UpdateOne(context.Background(), filter, update)
+	update := bson.M{"$set": bson.M{
+		"githubusername": contributor.GithubUsername,
+		"name":           contributor.Name,
+		"email":          contributor.Email,
+	}}
+	result, err := db.Collection.UpdateOne(Ctx, filter, update)
 
+	if err != nil {
+		return errors.New("error while updating the document")
+	}
 	if result.MatchedCount == 0 {
 		return errors.New("document not found. Document with the given ID may not exist")
 	}
@@ -108,25 +117,34 @@ func (db *MongoDB) UpdateByID(contributor *model.Contributor) error {
 	return nil
 }
 
-// DELETE a contributor by ID
+// DeleteByID deletes a contributor by ID
 func (db *MongoDB) DeleteByID(userId string) error {
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	filter := bson.M{"_id": userId}
-	result, _ := Collection.DeleteOne(context.Background(), filter)
+	result, err := db.Collection.DeleteOne(Ctx, filter)
 
+	if err != nil {
+		return errors.New("error while deleting the document")
+	}
 	if result.DeletedCount == 0 {
-		return errors.New("error while deleting the document. Document with the given ID may not exist")
+		return errors.New("document not found. Document with the given ID may not exist")
 	}
 
 	return nil
-
 }
 
-// DELETE contribution by ID
+// DeleteContributionByID removes a specific contribution from a contributor's record
 func (db *MongoDB) DeleteContributionByID(userId string, contributionID string) error {
+	Ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	filter := bson.M{"_id": userId, "contributions.contributionid": contributionID}
 	update := bson.M{"$pull": bson.M{"contributions": bson.M{"contributionid": contributionID}}}
-	result, _ := Collection.UpdateOne(context.Background(), filter, update)
+	result, err := db.Collection.UpdateOne(Ctx, filter, update)
 
+	if err != nil {
+		return errors.New("error while deleting the contribution")
+	}
 	if result.MatchedCount == 0 {
 		return errors.New("document not found. Document with the given ID may not exist or contribution with the given ID may not exist")
 	}
@@ -134,11 +152,17 @@ func (db *MongoDB) DeleteContributionByID(userId string, contributionID string) 
 	return nil
 }
 
-// ADD contribution by ID
+// AddContributionByID adds a contribution by ID
 func (db *MongoDB) AddContributionByID(userId string, contribution *model.Contribution) error {
+	Ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 	filter := bson.M{"_id": userId, "contributions.contributionid": bson.M{"$ne": contribution.ContributionID}}
 	update := bson.M{"$push": bson.M{"contributions": contribution}}
-	result, _ := Collection.UpdateOne(Ctx, filter, update)
+	result, err := db.Collection.UpdateOne(Ctx, filter, update)
+
+	if err != nil {
+		return errors.New("error while adding contribution")
+	}
 
 	if result.MatchedCount == 0 {
 		return errors.New("could not add contribution. User with the given ID may not exist or contribution with the given ID may already exist")

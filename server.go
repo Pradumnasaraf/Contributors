@@ -4,17 +4,30 @@ import (
 	"log"
 	"os"
 
+	"github.com/Pradumnasaraf/Contributors/config"
+	"github.com/Pradumnasaraf/Contributors/graph"
 	"github.com/Pradumnasaraf/Contributors/handler"
 	"github.com/Pradumnasaraf/Contributors/middleware"
+	database "github.com/Pradumnasaraf/Contributors/mongo"
 	"github.com/Pradumnasaraf/Contributors/prometheus"
+	"github.com/Pradumnasaraf/Contributors/redis"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// Config setup
+	config.Config()
 
+	// Database connection
+	redis.RedisInit()
+	mongoClient := database.MongoInit()
+	graph.GetMongoClient(mongoClient)
+	defer redis.RedisClose()
+
+	// Server setup
 	router := gin.Default()
 
-	// Above BasicAuth to bypass authentication for /metrics and /health
+	// Bypasses Auth
 	router.Use(prometheus.RecordRequestLatency())
 	router.Use(prometheus.RequestMetricsMiddleware())
 	router.GET("/health", handler.HealthCheckHandler())

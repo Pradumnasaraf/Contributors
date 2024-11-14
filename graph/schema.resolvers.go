@@ -8,11 +8,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Pradumnasaraf/Contributors/database"
 	"github.com/Pradumnasaraf/Contributors/graph/model"
+	"github.com/Pradumnasaraf/Contributors/mongo"
 )
 
-var db = database.NewMongoDB()
+var mongoClient *database.MongoDB
+
+// GetMongoClient is a function that sets the MongoDB client.
+func GetMongoClient(client *database.MongoDB) {
+	mongoClient = client
+}
 
 // AddAContributor is the resolver for the addAContributor field.
 func (r *mutationResolver) AddAContributor(ctx context.Context, input model.NewContributor) (*model.Contributor, error) {
@@ -36,7 +41,7 @@ func (r *mutationResolver) AddAContributor(ctx context.Context, input model.NewC
 		newContributor.Contributions = []*model.Contribution{}
 	}
 
-	err := db.Add(newContributor)
+	err := mongoClient.Add(newContributor)
 
 	if err != nil {
 		return nil, err
@@ -54,7 +59,7 @@ func (r *mutationResolver) UpdateAContributor(ctx context.Context, userID string
 		GithubUsername: input.GithubUsername,
 	}
 
-	err := db.UpdateByID(updateContributor)
+	err := mongoClient.UpdateByID(updateContributor)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +69,7 @@ func (r *mutationResolver) UpdateAContributor(ctx context.Context, userID string
 
 // DeleteAContributor is the resolver for the deleteAContributor field.
 func (r *mutationResolver) DeleteAContributor(ctx context.Context, userID string) (*model.Contributor, error) {
-	err := db.DeleteByID(userID)
+	err := mongoClient.DeleteByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +78,7 @@ func (r *mutationResolver) DeleteAContributor(ctx context.Context, userID string
 
 // DeleteAContribution is the resolver for the deleteAContribution field.
 func (r *mutationResolver) DeleteAContribution(ctx context.Context, userID string, contributionID string) (*model.Contribution, error) {
-	err := db.DeleteContributionByID(userID, contributionID)
+	err := mongoClient.DeleteContributionByID(userID, contributionID)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +94,7 @@ func (r *mutationResolver) AddAContribution(ctx context.Context, userID string, 
 		Date:           input.Date,
 	}
 
-	err := db.AddContributionByID(userID, newContribution)
+	err := mongoClient.AddContributionByID(userID, newContribution)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +104,7 @@ func (r *mutationResolver) AddAContribution(ctx context.Context, userID string, 
 
 // GetAllContributors is the resolver for the getAllContributors field.
 func (r *queryResolver) GetAllContributors(ctx context.Context) ([]*model.Contributor, error) {
-	contributors, err := db.GetAll()
+	contributors, err := mongoClient.GetAll()
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +114,7 @@ func (r *queryResolver) GetAllContributors(ctx context.Context) ([]*model.Contri
 
 // GetAContributor is the resolver for the getAContributor field.
 func (r *queryResolver) GetAContributor(ctx context.Context, userID string) (*model.Contributor, error) {
-	contributor, err := db.GetByID(userID)
+	contributor, err := mongoClient.GetByID(userID)
 	if err != nil {
 		return nil, err
 	}

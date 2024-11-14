@@ -11,13 +11,28 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func RateLimiter(clientIP string) error {
-	ctx := context.Background()
-	rdb := redis.NewClient(&redis.Options{
+var (
+	redisClient *redis.Client
+	limiter     *redis_rate.Limiter
+)
+
+func RedisInit() {
+	redisClient = redis.NewClient(&redis.Options{
 		Addr: os.Getenv("REDIS_URI"),
 	})
+	limiter = redis_rate.NewLimiter(redisClient)
+}
 
-	limiter := redis_rate.NewLimiter(rdb)
+func RedisClose() {
+	err := redisClient.Close()
+	if err != nil {
+		log.Fatal("unable to close the redis connection.")
+	}
+}
+
+func RateLimiter(clientIP string) error {
+	ctx := context.Background()
+
 	limitInt, _ := strconv.Atoi(os.Getenv("REDIS_RATE_LIMIT"))
 	res, err := limiter.Allow(ctx, clientIP, redis_rate.PerHour(limitInt))
 	if err != nil {
