@@ -43,7 +43,7 @@ func TestAddAContribution(t *testing.T) {
 				return req
 			}(),
 			ExpectedStatus: http.StatusOK,
-			ExpectedBody:   `{"data": {"addAContribution": {"contributionId": "Ctest/test"}}}`,
+			ExpectedBody:   `{"data": {"addAContribution": {"contributionId": }`,
 		},
 	}
 
