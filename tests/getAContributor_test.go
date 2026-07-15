@@ -42,7 +42,7 @@ func TestGetAContributor(t *testing.T) {
 				return req
 			}(),
 			ExpectedStatus: http.StatusOK,
-			ExpectedBody:   `{"errors":[{"message":"error while getting the document. Document with the given ID may not exist","path":["getAContributor"]}],"data":null}`,
+			ExpectedBody:   `{"errors":[{"message":"error while getting the document. Document with the given ID may not exist","path":["getAContributor"],"locations":[{"line":1,"column":25}]}],"data":null}`,
 		},
 	}
 

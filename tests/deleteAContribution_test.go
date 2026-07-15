@@ -42,7 +42,7 @@ func TestDeleteAContribution(t *testing.T) {
 				return req
 			}(),
 			ExpectedStatus: http.StatusOK,
-			ExpectedBody:   `{"errors":[{"message":"document not found. Document with the given ID may not exist or contribution with the given ID may not exist","path":["deleteAContribution"]}],"data":null}`,
+			ExpectedBody:   `{"errors":[{"message":"document not found. Document with the given ID may not exist or contribution with the given ID may not exist","path":["deleteAContribution"],"locations":[{"line":1,"column":32}]}],"data":null}`,
 		},
 	}
 

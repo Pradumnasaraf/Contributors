@@ -17,6 +17,9 @@ type Contributor struct {
 	Contributions  []*Contribution `json:"contributions,omitempty"`
 }
 
+type Mutation struct {
+}
+
 type NewContribution struct {
 	ProjectName string `json:"projectName"`
 	Type        string `json:"type"`
@@ -28,6 +31,9 @@ type NewContributor struct {
 	Name           string           `json:"name"`
 	Email          string           `json:"email"`
 	Contributions  *NewContribution `json:"contributions,omitempty"`
+}
+
+type Query struct {
 }
 
 type UpdateContributor struct {
