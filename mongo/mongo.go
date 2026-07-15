@@ -66,7 +66,7 @@ func (db *MongoDB) GetAll() ([]*model.Contributor, error) {
 		return nil, errors.New("error while getting the documents")
 	}
 
-	defer cursor.Close(Ctx)
+	defer func() { _ = cursor.Close(Ctx) }()
 	var result []*model.Contributor
 
 	for cursor.Next(Ctx) {
