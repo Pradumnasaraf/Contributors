@@ -10,7 +10,7 @@ require (
 	github.com/magiconair/properties v1.18.12
 	github.com/prometheus/client_golang v1.25.0
 	github.com/redis/go-redis/v9 v9.23.0
-	github.com/vektah/gqlparser/v2 v2.5.62
+	github.com/vektah/gqlparser/v2 v2.5.63
 	go.mongodb.org/mongo-driver v1.17.10
 )
 
